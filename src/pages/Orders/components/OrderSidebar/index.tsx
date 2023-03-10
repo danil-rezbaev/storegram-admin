@@ -3,9 +3,12 @@ import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import styles from "./OrderSidebar.module.scss";
 import useWindowSize, { WindowSize } from "../../../../hooks/useWindowSize";
-import { IconButton, List, ListItem, Typography } from "@mui/material";
+import { Divider, IconButton, Link, List, ListItem, Typography } from "@mui/material";
 import { OrderInfo } from "../../OrdersTypes";
 import { Close } from "@mui/icons-material";
+import Moment from "react-moment";
+import OrderStatus from "../OrderStatus";
+import ProductsTable from "../ProductsTable";
 
 export type OrderSidebarProps = {
   data: OrderInfo | null,
@@ -34,17 +37,14 @@ const OrderSidebar: FC<OrderSidebarProps> = (props) => {
       width: sidebarWidth,
       position: 'relative',
       height: '100%',
-      minHeight: '100vh',
+      minHeight: open ? '100vh' : "inherit",
+      visibility: open ? "visible": "hidden",
       zIndex: 1000,
       mt: '-1px',
       borderTop: 1,
       borderColor: 'divider'
     },
   }
-
-  // const details = {
-  //   ...data.
-  // }
 
   return (
     <Box
@@ -67,7 +67,7 @@ const OrderSidebar: FC<OrderSidebarProps> = (props) => {
         sx={drawerStyles}
       >
         <Box className={styles.header}>
-          <Typography component="h6">
+          <Typography component="h5">
             <b>{data?.id}</b>
           </Typography>
 
@@ -76,19 +76,63 @@ const OrderSidebar: FC<OrderSidebarProps> = (props) => {
           </IconButton>
         </Box>
 
-        {/*<Divider/>*/}
-
-        <div className={styles.container}>
+        <Box className={styles.container}>
           <Typography component="h6">
             <b>Детали</b>
           </Typography>
 
-          <List>
+          <List className={styles.list}>
             <ListItem>
-              p
+              <Typography>Дата и время</Typography>
+              <Moment format="DD/MM/YYYY hh:mm" element="p">
+                {data?.date}
+              </Moment>
+            </ListItem>
+
+            <Divider/>
+
+            <ListItem>
+              <Typography>Клиент</Typography>
+              <div>
+                <Typography>{data?.info.customer}</Typography>
+                <Link
+                  href={`tel:${data?.info.phone}`}
+                >
+                  {data?.info.phone}
+                </Link>
+              </div>
+            </ListItem>
+
+            <Divider/>
+
+            <ListItem>
+              <Typography>Статус заказа</Typography>
+              <div>
+                <OrderStatus type={data?.status}/>
+              </div>
+            </ListItem>
+
+            <Divider/>
+
+            <ListItem>
+              <Typography>Сумма заказа</Typography>
+              <Typography>{data?.amount}</Typography>
             </ListItem>
           </List>
-        </div>
+        </Box>
+
+        <Box
+          className={styles.container}
+          mt={3}
+        >
+          <Typography component="h6">
+            <b>Список товаров</b>
+          </Typography>
+
+          {data
+            ? <ProductsTable data={data.products}/>
+            : null}
+        </Box>
       </Drawer>
     </Box>
   );

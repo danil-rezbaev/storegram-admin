@@ -27,8 +27,7 @@ const OrdersTable: FC<OrdersTableProps> = (props) => {
             <TableCell
               scope="row"
               sx={{
-                width: '10%',
-                minWidth: '90px'
+                width: '90px',
               }}
             >
               <b>Дата</b>

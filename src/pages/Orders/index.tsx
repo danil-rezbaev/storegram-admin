@@ -34,10 +34,8 @@ const Orders: FC<OrdersProps> = () => {
   return (
     <Box
       sx={{
-        sm: {
-          display: 'grid',
-          gridTemplateColumns: `1fr ${sidebarWidth}px`
-        }
+        display: open ? `grid` : 'block',
+        gridTemplateColumns: open ? `1fr ${sidebarWidth}px` : '1fr'
       }}
     >
       <PageContent

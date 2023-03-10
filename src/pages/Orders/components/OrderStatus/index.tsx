@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { Chip } from "@mui/material";
 
 export type OrderStatusProps = {
-  type: 'success' | 'error'
+  type?: 'success' | 'error'
 }
 
 const OrderStatus: FC<OrderStatusProps> = (props) => {
@@ -19,6 +19,8 @@ const OrderStatus: FC<OrderStatusProps> = (props) => {
       title: "Неоплачено",
     }
   }
+
+  if(!type) return null
 
   return (
     <Chip

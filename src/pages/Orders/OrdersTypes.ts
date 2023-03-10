@@ -1,4 +1,4 @@
-type OrderProduct = {
+export type OrderProduct = {
   title: string,
   price: number
 }

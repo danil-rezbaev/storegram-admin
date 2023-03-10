@@ -18,3 +18,13 @@
 .container {
   padding: 0 24px;
 }
+
+
+.list {
+  li {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
