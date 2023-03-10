@@ -1,0 +1,20 @@
+@import "../../assets/styles/variables";
+
+.root {
+  margin-top: 30px !important;
+}
+
+.menuItem {
+  margin-bottom: 6px !important;
+  border-radius: 5px !important;
+}
+
+.menuItemSelected {
+  color: $blue !important;
+  background-color: $light-blue !important;
+}
+
+.menuItemIcon {
+  color: inherit !important;
+  min-width: 40px !important;
+}
