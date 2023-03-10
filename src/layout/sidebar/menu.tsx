@@ -1,13 +1,5 @@
-import { PeopleAltRounded, StoreRounded, CategoryRounded, CreditCardRounded, SettingsRounded } from "@mui/icons-material";
+import { CategoryRounded, CreditCardRounded, SettingsRounded, ShoppingCartRounded, LocalMallRounded } from "@mui/icons-material";
 import { ReactNode } from "react";
-
-// const menuItems = [
-//   'Заказы',
-//   'Товары',
-//   'Категории',
-//   'Платежная система',
-//   'Настройки',
-// ]
 
 export type MenuItem = {
   code: string,
@@ -19,12 +11,12 @@ const menuItems: MenuItem[] = [
   {
     code: 'orders',
     title: 'Заказы',
-    icon: <PeopleAltRounded />
+    icon: <ShoppingCartRounded />
   },
   {
     code: 'products',
-    title: 'Товары',
-    icon: <StoreRounded />
+    title: 'Продукты',
+    icon: <LocalMallRounded />
   },
   {
     code: 'categories',
