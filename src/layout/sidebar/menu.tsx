@@ -14,7 +14,7 @@ const menuItems: MenuItem[] = [
     icon: <ShoppingCartRounded />
   },
   {
-    code: 'products',
+    code: 'products-list',
     title: 'Продукты',
     icon: <LocalMallRounded />
   },
