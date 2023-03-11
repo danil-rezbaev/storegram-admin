@@ -1,13 +1,18 @@
 import React from 'react';
 import { FC, ReactNode } from 'react';
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import styles from "./PageContent.module.scss";
+import { AddOutlined } from "@mui/icons-material";
 
 export type PageContentProps = {
   title: string,
   description?: string,
   children?: ReactNode
-  style?: any
+  style?: any,
+  button?: {
+    title: string,
+    handler: () => any
+  }
 }
 
 const PageContent: FC<PageContentProps> = (props) => {
@@ -15,18 +20,32 @@ const PageContent: FC<PageContentProps> = (props) => {
     title,
     children,
     description,
-    style
+    style,
+    button
   } = props
 
   return (
     <div className={styles.root} style={style}>
-      <Typography
-        variant="h4"
-        component="h2"
-        sx={{fontWeight: 500}}
-      >
-        { title }
-      </Typography>
+      <div className={styles.header}>
+        <Typography
+          variant="h4"
+          component="h2"
+          sx={{fontWeight: 500}}
+        >
+          { title }
+        </Typography>
+
+        {button ? (
+          <Button
+            variant="contained"
+            startIcon={<AddOutlined />}
+            onClick={button.handler}
+          >
+            <b> {button.title}</b>
+          </Button>
+        ) : null}
+      </div>
+
 
       <Typography
         variant="subtitle1"
@@ -35,7 +54,7 @@ const PageContent: FC<PageContentProps> = (props) => {
         { description }
       </Typography>
 
-      <Box mt={2}>
+      <Box mt={4}>
         {children}
       </Box>
     </div>
