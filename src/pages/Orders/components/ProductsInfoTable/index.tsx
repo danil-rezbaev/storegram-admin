@@ -3,15 +3,14 @@ import { FC } from 'react';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { OrderProduct } from "../../OrdersTypes";
 
-export type OrdersTableProps = {
+export type ProductsInfoTableProps = {
   data: OrderProduct[]
 }
 
-const OrdersTable: FC<OrdersTableProps> = (props) => {
+const ProductsInfoTable: FC<ProductsInfoTableProps> = (props) => {
   const {
     data
   } = props
-
 
   return (
     <TableContainer
@@ -62,4 +61,4 @@ const OrdersTable: FC<OrdersTableProps> = (props) => {
   );
 }
 
-export default OrdersTable
+export default ProductsInfoTable
