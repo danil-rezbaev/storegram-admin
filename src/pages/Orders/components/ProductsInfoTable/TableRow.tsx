@@ -5,7 +5,7 @@ import OrderStatus from "../OrderStatus";
 import DateFormat from "../DateFormat";
 import { OrderInfo } from "../../OrdersTypes";
 import { useAppDispatch } from "../../../../hooks/redux";
-import { openOrderInfoModal } from "../../../../store/OrderInfoModalSlice";
+import { openOrderInfoModal } from "../../../../store/orderInfoModalSlice";
 
 export type OrdersTableRowProps = {
   data: OrderInfo

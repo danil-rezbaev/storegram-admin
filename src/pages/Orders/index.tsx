@@ -8,7 +8,7 @@ import { orderData } from "../../layout/pages/order/orders";
 import OrdersTable from "./components/OrdersTable";
 import OrderSidebar from "./components/OrderSidebar";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { closeOrderInfoModal } from "../../store/OrderInfoModalSlice";
+import { closeOrderInfoModal } from "../../store/orderInfoModalSlice";
 
 export type OrdersProps = unknown
 

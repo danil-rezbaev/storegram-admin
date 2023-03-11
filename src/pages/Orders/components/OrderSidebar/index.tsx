@@ -8,7 +8,7 @@ import { OrderInfo } from "../../OrdersTypes";
 import { Close } from "@mui/icons-material";
 import Moment from "react-moment";
 import OrderStatus from "../OrderStatus";
-import ProductsTable from "../ProductsTable";
+import ProductsInfoTable from "../ProductsInfoTable";
 
 export type OrderSidebarProps = {
   data: OrderInfo | null,
@@ -130,7 +130,7 @@ const OrderSidebar: FC<OrderSidebarProps> = (props) => {
           </Typography>
 
           {data
-            ? <ProductsTable data={data.products}/>
+            ? <ProductsInfoTable data={data.products}/>
             : null}
         </Box>
       </Drawer>
