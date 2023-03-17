@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FC } from 'react';
 import { TableCell, TableRow, Typography } from "@mui/material";
-import { Product } from "../../Product/ProductTypes";
+import { Product } from "../../EditProduct/ProductTypes";
 import _ from "lodash";
 import ProductsTableControl from "./ProductsTableControl";
 
@@ -16,7 +16,7 @@ const ProductsTableRow: FC<ProductsTableRowProps> = (props) => {
 
   const {
     id,
-    image,
+    images,
     title,
     category,
     price
@@ -40,12 +40,12 @@ const ProductsTableRow: FC<ProductsTableRowProps> = (props) => {
       <TableCell>
         <Typography>
           <img
-            src={image[0]}
+            src={images[0]}
             style={{
               width: '100%',
               maxWidth: '80px',
               maxHeight: '80px'
-          }}
+            }}
             alt="preview product"
           />
         </Typography>
