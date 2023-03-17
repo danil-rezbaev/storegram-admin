@@ -24,10 +24,11 @@ const DeleteProductModal = () => {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: '100%',
+    maxWidth: 500,
     bgcolor: 'background.paper',
     border: 0,
-    borderRadius: '5px',
+    borderRadius: '10px',
     boxShadow: 24,
     p: 4,
   };
@@ -41,24 +42,24 @@ const DeleteProductModal = () => {
     >
       <Box sx={style}>
         <Typography
-          variant="h5"
+          variant="h6"
           component="h2"
           sx={{
             fw: 'bold'
           }}
         >
-          Удаление
+          Удалить
         </Typography>
         <Typography
           variant="subtitle1"
           component="p"
-          mt={2}
+          mt={1}
           lineHeight={1.25}
         >
           Вы действительно хотите удалить продукт <b>{title}</b>?
         </Typography>
 
-        <Box mt={1.5} display="flex" gap={2}>
+        <Box mt={2} display="flex" gap={2}>
           <Button
             color="error"
             variant="contained"
@@ -69,6 +70,7 @@ const DeleteProductModal = () => {
           <Button
             color="inherit"
             variant="outlined"
+            onClick={handleClose}
           >
             Отменить
           </Button>
