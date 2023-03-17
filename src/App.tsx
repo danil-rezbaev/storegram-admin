@@ -5,7 +5,8 @@ import { Route, Routes } from 'react-router-dom'
 import Orders from "./pages/Orders";
 import Error from "./pages/Error";
 import ProductsList from "./pages/ProductsList";
-import Product from "./pages/Product";
+import EditProduct from "./pages/EditProduct";
+import CreateProduct from "./pages/CreateProduct";
 
 function App() {
   return (
@@ -14,7 +15,8 @@ function App() {
         <Routes>
           <Route index path='/orders' element={<Orders/>} />
           <Route index path='/products-list' element={<ProductsList/>} />
-          <Route index path='/product' element={<Product/>} />
+          <Route index path='/edit-product' element={<EditProduct/>} />
+          <Route index path='/create-product' element={<CreateProduct/>} />
           <Route path='*' element={<Error title="404" description="Страница не найдена"/>} />
         </Routes>
       </Base>
