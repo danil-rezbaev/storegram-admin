@@ -1,6 +1,7 @@
 export type Product = {
   id: string,
-  image: string[],
+  active: boolean,
+  images: string[],
   title: string,
   description: string,
   category: string,
