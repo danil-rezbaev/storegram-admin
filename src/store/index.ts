@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import OrderInfoModalReducer from './orderInfoModalSlice'
-import ViewProductReducer from './viewProductSlice'
+import EditProductReducer from './editProductSlice'
 import DeleteProductModalReducer from './deleteProductModal'
 
 const store = configureStore({
   reducer: {
     orderInfoModal: OrderInfoModalReducer,
-    viewProduct: ViewProductReducer,
+    editProduct: EditProductReducer,
     deleteProductModal: DeleteProductModalReducer,
   }
 })
