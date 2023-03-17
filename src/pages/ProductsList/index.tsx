@@ -28,11 +28,10 @@ const ProductsList: FC<ProductsListProps> = () => {
     <PageContent
       title="Продукты"
       button={{
-        title: "Добавить",
-        handler: () => navigate('/add-product')
+        title: "Создать",
+        handler: () => navigate('/create-product')
       }}
     >
-
       <FormControl
         sx={{
           display: 'grid',
