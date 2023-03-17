@@ -6,6 +6,7 @@ import { blue, grey, red } from "@mui/material/colors";
 import styles from "../../../components/UserCard/UserCard.module.scss";
 import { useAppDispatch } from "../../../hooks/redux";
 import { openDeleteProductModal } from "../../../store/deleteProductModal";
+import { useNavigate } from "react-router-dom";
 
 export type ProductsTableControlProps = {
   id: string,
@@ -17,6 +18,8 @@ const ProductsTableControl: FC<ProductsTableControlProps> = (props) => {
     id,
     title
   } = props
+
+  const navigate = useNavigate()
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -34,6 +37,11 @@ const ProductsTableControl: FC<ProductsTableControlProps> = (props) => {
   const handleDelete = () => {
     setAnchorEl(null);
     dispatch(openDeleteProductModal({ id, title}))
+  }
+
+  const handleEdit = () => {
+    navigate('/edit-product')
+    setAnchorEl(null);
   }
 
   const menuStyle = {
@@ -73,7 +81,7 @@ const ProductsTableControl: FC<ProductsTableControlProps> = (props) => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
       >
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleEdit}>
           <ListItemIcon>
             <EditRounded fontSize="small" />
           </ListItemIcon>
