@@ -7,6 +7,7 @@ import Error from "./pages/Error";
 import ProductsList from "./pages/ProductsList";
 import EditProduct from "./pages/EditProduct";
 import CreateProduct from "./pages/CreateProduct";
+import Categories from "./pages/Categories";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route index path='/products-list' element={<ProductsList/>} />
           <Route index path='/edit-product' element={<EditProduct/>} />
           <Route index path='/create-product' element={<CreateProduct/>} />
+          <Route index path='/categories' element={<Categories/>} />
           <Route path='*' element={<Error title="404" description="Страница не найдена"/>} />
         </Routes>
       </Base>

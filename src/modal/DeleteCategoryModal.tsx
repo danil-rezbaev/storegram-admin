@@ -1,26 +1,25 @@
 import React from 'react';
 import { Button, Modal, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
-import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { closeDeleteProductModal } from "../../store/deleteProductModal";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { closeDeleteCategoryModal } from "../store/deleteCategoryModal";
 
-const DeleteProductModal = () => {
+const DeleteCategoryModal = () => {
   const dispatch = useAppDispatch()
-  const store = useAppSelector(store => store.deleteProductModal)
+  const store = useAppSelector(store => store.deleteCategoryModal)
 
   const {
-    id,
     title,
-    visible
+    visible,
   } = store
 
   const handleClose = () => {
     //axios.delete
-    dispatch(closeDeleteProductModal())
+    dispatch(closeDeleteCategoryModal())
   }
 
   const style = {
-    position: 'absolute' as 'absolute',
+    position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
@@ -56,7 +55,7 @@ const DeleteProductModal = () => {
           mt={1}
           lineHeight={1.25}
         >
-          Вы действительно хотите удалить продукт <b>{title}</b>?
+          Вы действительно хотите удалить категорию <b>{title}</b>?
         </Typography>
 
         <Box mt={2} display="flex" gap={2}>
@@ -80,4 +79,4 @@ const DeleteProductModal = () => {
   );
 };
 
-export default DeleteProductModal;
+export default DeleteCategoryModal;

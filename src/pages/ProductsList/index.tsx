@@ -7,7 +7,7 @@ import { Search } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import ProductsTable from "./ProductsTable";
 import { productsTable } from "../../layout/pages/products/products";
-import DeleteProductModal from "./DeleteProductModal";
+import DeleteProductModal from "../../modal/DeleteProductModal";
 
 export type ProductsListProps = unknown
 
