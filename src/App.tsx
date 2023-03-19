@@ -10,6 +10,7 @@ import CreateProduct from "./pages/CreateProduct";
 import Categories from "./pages/Categories";
 import EditCategory from "./pages/EditCategory";
 import CreateCategory from "./pages/CreateCategory";
+import Settings from "./pages/Settings";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route index path='/categories' element={<Categories/>} />
           <Route index path='/edit-category' element={<EditCategory/>} />
           <Route index path='/create-category' element={<CreateCategory/>} />
+          <Route index path='/settings' element={<Settings/>} />
           <Route path='*' element={<Error title="404" description="Страница не найдена"/>} />
         </Routes>
       </Base>
