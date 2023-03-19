@@ -15,16 +15,16 @@ const CategoriesTable: FC<CategoriesTableProps> = (props) => {
 
   const tableHead = [
     {
-      title: "ID",
+      title: "Код",
       sx: {width: '75px'}
     },
     {
       title: "Название",
-      sx: {width: '150px'}
+      sx: {width: '200px'}
     },
     {
       title: "Включено",
-      sx: {width: '300px'}
+      sx: {width: '200px'}
     },
     {
       title: "",

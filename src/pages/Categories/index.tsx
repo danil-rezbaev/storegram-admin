@@ -16,7 +16,7 @@ const CreateProduct: FC<CreateProductProps> = () => {
       title="Категории"
       button={{
         title: "Создать",
-        handler: () => navigate('/create-cetegory')
+        handler: () => navigate('/create-category')
       }}
     >
       <CategoriesTable data={categoriesTable} />

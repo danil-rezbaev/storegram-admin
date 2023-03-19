@@ -44,7 +44,7 @@ const CategoriesTableRow: FC<ProductsTableRowProps> = (props) => {
       </TableCell>
 
       <TableCell>
-        <CategoriesTableControl id={code} title={title} />
+        <CategoriesTableControl data={data} />
       </TableCell>
     </TableRow>
   );

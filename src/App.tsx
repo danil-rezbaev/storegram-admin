@@ -8,6 +8,8 @@ import ProductsList from "./pages/ProductsList";
 import EditProduct from "./pages/EditProduct";
 import CreateProduct from "./pages/CreateProduct";
 import Categories from "./pages/Categories";
+import EditCategory from "./pages/EditCategory";
+import CreateCategory from "./pages/CreateCategory";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
           <Route index path='/edit-product' element={<EditProduct/>} />
           <Route index path='/create-product' element={<CreateProduct/>} />
           <Route index path='/categories' element={<Categories/>} />
+          <Route index path='/edit-category' element={<EditCategory/>} />
+          <Route index path='/create-category' element={<CreateCategory/>} />
           <Route path='*' element={<Error title="404" description="Страница не найдена"/>} />
         </Routes>
       </Base>

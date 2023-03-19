@@ -60,7 +60,7 @@ const ProductsTableRow: FC<ProductsTableRowProps> = (props) => {
       ))}
 
       <TableCell>
-        <ProductsTableControl id={id} title={title} />
+        <ProductsTableControl data={data} />
       </TableCell>
     </TableRow>
   );

@@ -23,7 +23,7 @@ const editProductSlice = createSlice({
   name: 'viewProduct',
   initialState,
   reducers: {
-    addProduct (state, action: PayloadAction<{ data: Product, type?: "edit" | "show" }>) {
+    editProduct (state, action: PayloadAction<{ data: Product, type?: "edit" | "show" }>) {
       const { data, type = "show" } = action.payload
 
       state.type = type
@@ -32,6 +32,6 @@ const editProductSlice = createSlice({
   }
 })
 
-export const { addProduct } = editProductSlice.actions
+export const { editProduct } = editProductSlice.actions
 
 export default editProductSlice.reducer

@@ -7,17 +7,22 @@ import styles from "../../../components/UserCard/UserCard.module.scss";
 import { useAppDispatch } from "../../../hooks/redux";
 import { openDeleteProductModal } from "../../../store/deleteProductModal";
 import { useNavigate } from "react-router-dom";
+import { Product } from "../../EditProduct/ProductTypes";
+import { editProduct } from "../../../store/editProductSlice";
 
 export type ProductsTableControlProps = {
-  id: string,
-  title: string
+  data: Product
 }
 
 const ProductsTableControl: FC<ProductsTableControlProps> = (props) => {
   const {
+    data
+  } = props
+
+  const {
     id,
     title
-  } = props
+  } = data
 
   const navigate = useNavigate()
 
@@ -42,6 +47,7 @@ const ProductsTableControl: FC<ProductsTableControlProps> = (props) => {
   const handleEdit = () => {
     navigate('/edit-product')
     setAnchorEl(null);
+    dispatch(editProduct({ data }))
   }
 
   const menuStyle = {

@@ -7,17 +7,22 @@ import styles from "../../../components/UserCard/UserCard.module.scss";
 import { useAppDispatch } from "../../../hooks/redux";
 import { openDeleteCategoryModal } from "../../../store/deleteCategoryModal";
 import { useNavigate } from "react-router-dom";
+import { editCategory } from "../../../store/editCategorySlice";
+import { Category } from "../CategoriesTypes";
 
 export type CategoriesTableControlProps = {
-  id: string,
-  title: string
+  data: Category
 }
 
 const CategoriesTableControl: FC<CategoriesTableControlProps> = (props) => {
   const {
-    id,
-    title
+    data
   } = props
+
+  const {
+    code,
+    title
+  } = data
 
   const navigate = useNavigate()
 
@@ -36,11 +41,12 @@ const CategoriesTableControl: FC<CategoriesTableControlProps> = (props) => {
 
   const handleDelete = () => {
     setAnchorEl(null);
-    dispatch(openDeleteCategoryModal({ id, title}))
+    dispatch(openDeleteCategoryModal({ id: code, title}))
   }
 
   const handleEdit = () => {
     navigate('/edit-category')
+    dispatch(editCategory({data}))
     setAnchorEl(null);
   }
 
