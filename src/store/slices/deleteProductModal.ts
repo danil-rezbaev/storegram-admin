@@ -12,18 +12,18 @@ const initialState: DeleteProductModal = {
   visible: false
 }
 
-const deleteModalSlice = createSlice({
-  name: 'deleteModal',
+const deleteProductModalSlice = createSlice({
+  name: 'deleteProductModal',
   initialState,
   reducers: {
-    openDeleteCategoryModal (state, action: PayloadAction<Omit<DeleteProductModal, 'visible'>>) {
+    openDeleteProductModal (state, action: PayloadAction<Omit<DeleteProductModal, 'visible'>>) {
       const { id, title } = action.payload
 
       state.visible = true
       state.title = title
       state.id = id
     },
-    closeDeleteCategoryModal(state) {
+    closeDeleteProductModal(state) {
       state.title = ''
       state.visible = false
       state.id = ''
@@ -31,6 +31,6 @@ const deleteModalSlice = createSlice({
   }
 })
 
-export const { openDeleteCategoryModal, closeDeleteCategoryModal } = deleteModalSlice.actions
+export const { openDeleteProductModal, closeDeleteProductModal } = deleteProductModalSlice.actions
 
-export default deleteModalSlice.reducer
+export default deleteProductModalSlice.reducer

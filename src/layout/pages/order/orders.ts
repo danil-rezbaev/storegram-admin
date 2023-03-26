@@ -1,4 +1,4 @@
-import { OrderInfo } from "../../../pages/Orders/OrdersTypes";
+import { OrderInfo } from "../../../types/Order";
 
 export const orderData: OrderInfo[] = [
   {
@@ -39,6 +39,6 @@ export const orderData: OrderInfo[] = [
       }
     ],
     amount: 1000,
-    status: 'error'
+    status: 'success'
   }
 ];

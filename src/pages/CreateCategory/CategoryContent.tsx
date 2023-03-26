@@ -4,6 +4,10 @@ import * as yup from 'yup'
 import { Form, Formik } from 'formik'
 import { Category } from "../Categories/CategoriesTypes";
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
+import axios from "../../axios";
+import { openFloatAlert } from "../../store/slices/floatAlertSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { useNavigate } from "react-router-dom";
 
 export type ProductContentProps = {
   category?: Category,
@@ -11,7 +15,13 @@ export type ProductContentProps = {
 }
 
 const CategoryContent: FC<ProductContentProps> = (props) => {
-  const data = { ...props.category }
+  const {
+    type
+  } = props
+
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  const {current} = useAppSelector(store => store.store)
 
   const validationSchema = yup.object().shape({
     title: yup.string().required("Поле обязательно к заполнению"),
@@ -37,18 +47,49 @@ const CategoryContent: FC<ProductContentProps> = (props) => {
     return cyrillicToTranslit.transform(title, '_').toLowerCase();
   }
 
-  const formSubmit = (value: any) => {
-    const dataFormat = {
+  const formSubmit = async (value: any) => {
+    const valueFormat = {
       ...value,
       code: generateCode(value.title)
     }
 
-    console.log(dataFormat)
+    if(!current) {
+      return
+    }
+
+    try {
+      const data = await axios.post('/category',
+        { category: valueFormat })
+
+      if (data.status === 200) {
+        dispatch(openFloatAlert({
+          title: `Категория успешно ${type === 'create' ? 'создана' : 'изменена'}`,
+          type: "success"
+        }))
+        navigate('/categories')
+      } else {
+        dispatch(openFloatAlert({
+          title: `Ошибка при ${type === 'create' ? 'создании' : 'изменении'} категории`,
+          type: "error"
+        }))
+      }
+    } catch (e) {
+      dispatch(openFloatAlert({
+        title: `Ошибка при ${type === 'create' ? 'создании' : 'изменении'} категории`,
+        type: "error"
+      }))
+    }
+  }
+
+  const initial = {
+    title: '',
+    code: '',
+    active: true
   }
 
   return (
     <Formik
-      initialValues={data}
+      initialValues={initial}
       onSubmit={formSubmit}
       validationSchema={validationSchema}
       validateOnChange

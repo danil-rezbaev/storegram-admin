@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { FC } from 'react';
 import { TableCell, TableRow, Typography } from "@mui/material";
-import { Product } from "../../EditProduct/ProductTypes";
 import _ from "lodash";
 import ProductsTableControl from "./ProductsTableControl";
+import { Product } from "../../../types/Store";
 
 export type ProductsTableRowProps = {
   data: Product
@@ -15,14 +15,13 @@ const ProductsTableRow: FC<ProductsTableRowProps> = (props) => {
   } = props
 
   const {
-    id,
-    images,
+    // images,
     title,
     category,
     price
   } = data
 
-  const info = _.entries({title, category, price})
+  const info = _.entries({title, category})
 
   return (
     <TableRow
@@ -32,23 +31,15 @@ const ProductsTableRow: FC<ProductsTableRowProps> = (props) => {
       hover
     >
       <TableCell>
-        <Typography>
-          {id}
-        </Typography>
-      </TableCell>
-
-      <TableCell>
-        <Typography>
-          <img
-            src={images[0]}
-            style={{
-              width: '100%',
-              maxWidth: '80px',
-              maxHeight: '80px'
-            }}
-            alt="preview product"
-          />
-        </Typography>
+        {/*<img*/}
+        {/*  src={images[0]}*/}
+        {/*  style={{*/}
+        {/*    width: '100%',*/}
+        {/*    maxWidth: '80px',*/}
+        {/*    maxHeight: '80px'*/}
+        {/*  }}*/}
+        {/*  alt="preview product"*/}
+        {/*/>*/}
       </TableCell>
 
       {info.map(item => (
@@ -58,6 +49,12 @@ const ProductsTableRow: FC<ProductsTableRowProps> = (props) => {
           </Typography>
         </TableCell>
       ))}
+
+      <TableCell>
+        <Typography>
+          {`${price.value} ${price.currency}`}
+        </Typography>
+      </TableCell>
 
       <TableCell>
         <ProductsTableControl data={data} />

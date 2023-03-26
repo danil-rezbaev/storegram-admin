@@ -1,32 +1,63 @@
 import FormControl from '@mui/material/FormControl';
 import * as React from 'react';
-import { FC } from 'react';
+import { ChangeEvent, FC, useEffect } from 'react';
 import PageContent from "../../components/PageContent";
 import { InputAdornment, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import { Search } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import ProductsTable from "./ProductsTable";
-import { productsTable } from "../../layout/pages/products/products";
 import DeleteProductModal from "../../modal/DeleteProductModal";
+import { useAppSelector } from "../../hooks/redux";
+import { Category, Product } from "../../types/Store";
 
 export type ProductsListProps = unknown
 
 const ProductsList: FC<ProductsListProps> = () => {
+  const {current, currentStore} = useAppSelector(store => store.store)
+
   const navigate = useNavigate()
+  const [categories, setCategories] = React.useState<Category[]>([]);
+  const [products, setProducts] = React.useState<Product[]>([]);
+  const [productsModified, setProductsModified] = React.useState<Product[]>(products);
   const [category, setCategory] = React.useState('');
+
+  const [search, setSearch] = React.useState('');
+
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>): void => {
+    setSearch(event.target.value)
+  }
+
+  useEffect(() => {
+    if(search) {
+      const pattern = new RegExp(search.toLowerCase())
+
+      const filterProducts = products.filter(item => {
+        const title = item.title.toLowerCase()
+        return pattern.test(title)
+      })
+      setProductsModified(filterProducts)
+    } else {
+      setProductsModified(products)
+    }
+  }, [products, search])
 
   const handleChange = (event: SelectChangeEvent) => {
     setCategory(event.target.value);
   };
 
-  const categories = [
-    'burgers',
-    'pizza'
-  ]
+  useEffect(() => {
+    if(current) {
+      const productsFormat = currentStore?.products || []
+      setProducts(productsFormat)
+
+      const categoriesFormat = currentStore?.categories || []
+      setCategories(categoriesFormat)
+    }
+  }, [current, currentStore])
 
   return (
     <PageContent
-      title="Продукты"
+      title="Товары"
       button={{
         title: "Создать",
         handler: () => navigate('/create-product')
@@ -40,8 +71,9 @@ const ProductsList: FC<ProductsListProps> = () => {
         }}
       >
         <TextField
-          id="input-with-icon-textfield"
-          placeholder="Найти продукт"
+          value={search}
+          onChange={handleSearch}
+          placeholder="Поиск по названию"
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -65,15 +97,16 @@ const ProductsList: FC<ProductsListProps> = () => {
             value={category}
             label="Категории"
             onChange={handleChange}
+            disabled={!categories.length}
           >
             {categories.map((item) => (
-              <MenuItem value={item}>{ item }</MenuItem>
+              <MenuItem value={item.code}>{ item.title }</MenuItem>
             ))}
           </Select>
         </FormControl>
       </FormControl>
 
-      <ProductsTable data={productsTable} />
+      <ProductsTable data={productsModified} />
 
       <DeleteProductModal/>
     </PageContent>

@@ -3,9 +3,9 @@ import { FC } from 'react';
 import { TableCell, TableRow } from "@mui/material";
 import OrderStatus from "../OrderStatus";
 import DateFormat from "../DateFormat";
-import { OrderInfo } from "../../OrdersTypes";
+import { OrderInfo } from "../../../../types/Order";
 import { useAppDispatch } from "../../../../hooks/redux";
-import { openOrderInfoModal } from "../../../../store/orderInfoModalSlice";
+import { openOrderInfoModal } from "../../../../store/slices/orderInfoModalSlice";
 
 export type OrdersTableRowProps = {
   data: OrderInfo

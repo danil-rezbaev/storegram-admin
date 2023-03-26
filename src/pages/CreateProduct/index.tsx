@@ -8,7 +8,7 @@ export type CreateProductProps = unknown
 const CreateProduct: FC<CreateProductProps> = () => {
   return (
     <PageContent
-      title={`Создать продукт`}
+      title={`Создать товар`}
     >
       <ProductContent type="create" />
     </PageContent>

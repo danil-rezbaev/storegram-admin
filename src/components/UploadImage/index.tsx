@@ -1,31 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Modal, Upload } from 'antd';
-import type { RcFile, UploadProps } from 'antd/es/upload';
+import type { RcFile } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
-
-const getBase64 = (file: RcFile): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
+import getBase64 from "../../hooks/getBase64";
+import { Box } from "@mui/material";
 
 export type UploadImageProps = {
-  images?: UploadFile[]
+  fileList: UploadFile[],
+  fileListHandler: (arg: any) => void
 }
 
 const UploadImage: React.FC<UploadImageProps> = (props) => {
   const {
-    images = []
+    fileList = [],
+    fileListHandler
   } = props
 
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
-
-  const [fileList, setFileList] = useState<UploadFile[]>(images);
 
   const handleCancel = () => setPreviewOpen(false);
 
@@ -39,13 +33,10 @@ const UploadImage: React.FC<UploadImageProps> = (props) => {
     setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1));
   };
 
-  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) =>
-    setFileList(newFileList);
-
   const uploadButton = (
     <div>
       <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
+      <div style={{ marginTop: 8 }}>Загрузить</div>
     </div>
   );
 
@@ -56,17 +47,42 @@ const UploadImage: React.FC<UploadImageProps> = (props) => {
   return (
     <>
       <Upload
+        // customRequest={uploadPicture}
+        onPreview={handlePreview}
+        onChange={fileListHandler}
         accept="image/png, image/jpeg, image/jpg"
         listType="picture-card"
+        maxCount={10}
+        multiple={true}
         fileList={fileList}
-        onPreview={handlePreview}
-        onChange={handleChange}
+        beforeUpload={(file: any) => {
+          fileListHandler([...fileList, file]);
+          return false;
+        }}
+        onRemove={(file: any) => {
+          const index = fileList.indexOf(file);
+          const newFileList = fileList.slice();
+          newFileList.splice(index, 1);
+          fileListHandler(newFileList);
+        }}
       >
         {fileList.length >= 8 ? null : uploadButton}
       </Upload>
-      <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
-        <img alt="example" style={{ width: '100%' }} src={previewImage} />
-      </Modal>
+
+      <Box
+        sx={{
+          zIndex: '2000'
+        }}
+      >
+        <Modal
+          open={previewOpen}
+          title={previewTitle}
+          footer={null}
+          onCancel={handleCancel}
+        >
+          <img alt="example" style={{ width: '100%' }} src={previewImage} />
+        </Modal>
+      </Box>
     </>
   );
 };

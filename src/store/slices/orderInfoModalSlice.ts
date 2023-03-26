@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { OrderInfo } from "../pages/Orders/OrdersTypes";
+import { OrderInfo } from "../../types/Order";
 
 export type OrderInfoModal = {
   data: OrderInfo | null,

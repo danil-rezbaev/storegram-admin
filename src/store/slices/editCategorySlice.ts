@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Category } from "../pages/Categories/CategoriesTypes";
+import { Category } from "../../pages/Categories/CategoriesTypes";
 
 export type EditCategory = {
   data: Category,
-  type: "edit" | "show"
+  type: "edit" | "create"
 }
 
 const initialState: EditCategory = {
@@ -12,15 +12,15 @@ const initialState: EditCategory = {
     title: '',
     active: false,
   },
-  type: "show"
+  type: "create"
 }
 
 const editCategorySlice = createSlice({
   name: 'viewProduct',
   initialState,
   reducers: {
-    editCategory (state, action: PayloadAction<{ data: Category, type?: "edit" | "show" }>) {
-      const { data, type = "show" } = action.payload
+    editCategory (state, action: PayloadAction<{ data: Category, type?: "edit" | "create" }>) {
+      const { data, type = "create" } = action.payload
 
       state.type = type
       state.data = data

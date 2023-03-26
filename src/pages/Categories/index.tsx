@@ -1,15 +1,26 @@
 import * as React from 'react';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import PageContent from "../../components/PageContent";
 import CategoriesTable from "./CategoriesTable";
-import { categoriesTable } from "../../layout/pages/categories/categories";
 import DeleteCategoryModal from "../../modal/DeleteCategoryModal";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../hooks/redux";
+import { Category } from "../../types/Store";
 
 export type CreateProductProps = unknown
 
 const CreateProduct: FC<CreateProductProps> = () => {
   const navigate = useNavigate()
+
+  const {current, currentStore} = useAppSelector(store => store.store)
+  const [categories, setCategories] = React.useState<Category[]>([]);
+
+  useEffect(() => {
+    if(current) {
+      const categoriesFormat = currentStore?.categories || []
+      setCategories(categoriesFormat)
+    }
+  }, [current, currentStore])
 
   return (
     <PageContent
@@ -19,7 +30,7 @@ const CreateProduct: FC<CreateProductProps> = () => {
         handler: () => navigate('/create-category')
       }}
     >
-      <CategoriesTable data={categoriesTable} />
+      <CategoriesTable data={categories} />
 
       <DeleteCategoryModal/>
     </PageContent>

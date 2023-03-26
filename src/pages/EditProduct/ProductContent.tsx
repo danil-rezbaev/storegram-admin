@@ -11,11 +11,18 @@ import {
   TextField,
   Typography
 } from "@mui/material";
-import UploadImage from "./UploadImage";
 import { CurrencyRuble } from "@mui/icons-material";
-import { Product } from "./ProductTypes";
 import * as yup from 'yup'
 import { Form, Formik } from 'formik'
+import { Category, Product } from "../../types/Store";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import axios from "../../axios";
+import { openFloatAlert } from "../../store/slices/floatAlertSlice";
+import UploadImage from "../../components/UploadImage";
+import { UploadFile } from "antd/es/upload/interface";
+import { UploadProps, RcFile } from "antd/es/upload";
+import { useNavigate } from "react-router-dom";
+import { addProduct, editProduct } from "../../store/slices/storeSlice";
 
 export type ProductContentProps = {
   product?: Product,
@@ -23,18 +30,31 @@ export type ProductContentProps = {
 }
 
 const ProductContent: FC<ProductContentProps> = (props) => {
-  const data = { ...props.product }
+  const {
+    product,
+    type
+  } = props
 
-  const categoriesData = [
-    'burgers',
-    'pizza'
-  ]
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const fileListHandler: UploadProps['onChange'] = ({ fileList: newFileList }) =>
+    setFileList(newFileList);
+
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  const {current, currentStore} = useAppSelector(store => store.store)
+  const categories: Category[] = currentStore?.categories ?? []
+
+  const defaultCategory = {
+    code: 'default',
+    title: 'По умолчанию',
+    active: true,
+  }
+  const categoriesFormat: Category[] = [defaultCategory, ...categories]
 
   const validationSchema = yup.object().shape({
     title: yup.string().required("Поле обязательно к заполнению"),
     description: yup.string().required("Поле обязательно к заполнению"),
     price: yup.string().required("Поле обязательно к заполнению"),
-    category: yup.string().required("Поле обязательно к заполнению"),
   })
 
   const boxStyles = {
@@ -46,13 +66,70 @@ const ProductContent: FC<ProductContentProps> = (props) => {
     }
   }
 
-  const formSubmit = (value: any) => {
-    console.log(value)
+  const formSubmit = async (value: any) => {
+    const formData = new FormData();
+
+    fileList.forEach((file) => {
+      formData.append('files[]', file as RcFile);
+    });
+
+    console.log({formData})
+
+    const imagesResponse = await axios.post('/upload', formData)
+
+    console.log(imagesResponse.data)
+
+    const valueFormat = {
+      ...value,
+      price: {
+        currency: 'rub',
+        value: value.price ?? 0
+      },
+    }
+
+    if(!current) {
+      return
+    }
+
+    try {
+      const data = await axios.post('/product',
+        { product: valueFormat })
+
+      if (data.status === 200) {
+        dispatch(openFloatAlert({
+          title: `Товар успешно ${type === 'create' ? 'создан' : 'изменен'}`,
+          type: "success"
+        }))
+
+        if(type === 'create') {
+          dispatch(addProduct({product: valueFormat}))
+        } else if (type === 'update') {
+          dispatch(editProduct({product: valueFormat}))
+        }
+
+        navigate('/products-list')
+      } else {
+        dispatch(openFloatAlert({
+          title: `Ошибка при ${type === 'create' ? 'создании' : 'изменении'} товара`,
+          type: "error"
+        }))
+      }
+    } catch (e) {
+      dispatch(openFloatAlert({
+        title: `Ошибка при ${type === 'create' ? 'создании' : 'изменении'} товара`,
+        type: "error"
+      }))
+    }
+  }
+
+  const initialValues = {
+    ...product,
+    price: product?.price.value ?? ''
   }
 
   return (
     <Formik
-      initialValues={data}
+      initialValues={initialValues}
       onSubmit={formSubmit}
       validationSchema={validationSchema}
       validateOnChange
@@ -70,7 +147,10 @@ const ProductContent: FC<ProductContentProps> = (props) => {
                   Изображение
                 </Typography>
 
-                <UploadImage />
+                <UploadImage
+                  fileList={fileList}
+                  fileListHandler={fileListHandler}
+                />
 
                 <Typography
                   variant="subtitle1"
@@ -156,18 +236,18 @@ const ProductContent: FC<ProductContentProps> = (props) => {
                 </Typography>
 
                 <Select
-                  labelId="products-categories--id"
-                  id="products-categories"
                   // value={categories}
                   // onChange={handleSelect}
                   name="category"
                   onChange={handleChange}
                   value={values.category}
                   error={!!errors.category}
+                  defaultValue={categoriesFormat[0].code}
+                  size="small"
                   fullWidth
                 >
-                  {categoriesData.map((item) => (
-                    <MenuItem value={item}>{ item }</MenuItem>
+                  {categoriesFormat.map((item) => (
+                    <MenuItem value={item.code}>{ item.title }</MenuItem>
                   ))}
                 </Select>
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FC } from 'react';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import { OrderProduct } from "../../OrdersTypes";
+import { OrderProduct } from "../../../../types/Order";
 
 export type ProductsInfoTableProps = {
   data: OrderProduct[]

@@ -5,10 +5,10 @@ import { DeleteRounded, EditRounded, MoreVert } from "@mui/icons-material";
 import { blue, grey, red } from "@mui/material/colors";
 import styles from "../../../components/UserCard/UserCard.module.scss";
 import { useAppDispatch } from "../../../hooks/redux";
-import { openDeleteProductModal } from "../../../store/deleteProductModal";
+import { openDeleteProductModal } from "../../../store/slices/deleteProductModal";
 import { useNavigate } from "react-router-dom";
-import { Product } from "../../EditProduct/ProductTypes";
-import { editProduct } from "../../../store/editProductSlice";
+import { editProduct } from "../../../store/slices/editProductSlice";
+import { Product } from "../../../types/Store";
 
 export type ProductsTableControlProps = {
   data: Product
@@ -20,7 +20,7 @@ const ProductsTableControl: FC<ProductsTableControlProps> = (props) => {
   } = props
 
   const {
-    id,
+    _id,
     title
   } = data
 
@@ -41,7 +41,7 @@ const ProductsTableControl: FC<ProductsTableControlProps> = (props) => {
 
   const handleDelete = () => {
     setAnchorEl(null);
-    dispatch(openDeleteProductModal({ id, title}))
+    dispatch(openDeleteProductModal({ id: _id, title}))
   }
 
   const handleEdit = () => {

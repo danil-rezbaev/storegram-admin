@@ -4,7 +4,7 @@ import Drawer from "@mui/material/Drawer";
 import styles from "./OrderSidebar.module.scss";
 import useWindowSize, { WindowSize } from "../../../../hooks/useWindowSize";
 import { Divider, IconButton, Link, List, ListItem, Typography } from "@mui/material";
-import { OrderInfo } from "../../OrdersTypes";
+import { OrderInfo } from "../../../../types/Order";
 import { Close } from "@mui/icons-material";
 import Moment from "react-moment";
 import OrderStatus from "../OrderStatus";

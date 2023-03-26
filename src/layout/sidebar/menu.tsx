@@ -15,7 +15,7 @@ const menuItems: MenuItem[] = [
   },
   {
     code: 'products-list',
-    title: 'Продукты',
+    title: 'Товары',
     icon: <LocalMallRounded />
   },
   {

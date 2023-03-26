@@ -4,10 +4,17 @@ import { Avatar, IconButton, ListItemIcon, Menu, MenuItem, Tooltip, Typography }
 import { deepPurple, red } from "@mui/material/colors";
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import { Logout, PersonRounded, Settings } from "@mui/icons-material";
+import { logout } from '../../store/slices/authSlice';
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 
 export type UserCardProps =  unknown
 
 const UserCard: FC<UserCardProps> = () => {
+  const authStore = useAppSelector(store => store.auth)
+  const userName = authStore.data?.login ?? 'Пользователь'
+  const userNameFirstLetter = userName.charAt(0)
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -16,6 +23,15 @@ const UserCard: FC<UserCardProps> = () => {
   };
 
   const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+
+  const handleLogout = () => {
+    dispatch(logout())
+    navigate('/login')
     setAnchorEl(null);
   };
 
@@ -30,42 +46,42 @@ const UserCard: FC<UserCardProps> = () => {
 
   return (
     <div className={styles.root}>
-    <Tooltip title="Профиль">
-      <>
-        <Avatar
-          sx={{
-            bgcolor: deepPurple[500],
-            width: 35,
-            height: 35
-          }}
-        >
-          D
-        </Avatar>
-
-          <Typography
-            className={styles.title}
+      <Tooltip title="Профиль">
+        <>
+          <Avatar
             sx={{
-              display: {
-                xs: 'none',
-                sm: 'flex'
-              }
+              bgcolor: deepPurple[500],
+              width: 35,
+              height: 35
             }}
           >
-            Daniel
-          </Typography>
+            {userNameFirstLetter}
+          </Avatar>
 
-        <IconButton
-          size="small"
-          aria-controls={open ? 'account-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-          className={styles.hint}
-          onClick={handleClick}
-        >
-          <KeyboardArrowDownRoundedIcon />
-        </IconButton>
-      </>
-    </Tooltip>
+            <Typography
+              className={styles.title}
+              sx={{
+                display: {
+                  xs: 'none',
+                  sm: 'flex'
+                }
+              }}
+            >
+              {userName}
+            </Typography>
+
+          <IconButton
+            size="small"
+            aria-controls={open ? 'account-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+            className={styles.hint}
+            onClick={handleClick}
+          >
+            <KeyboardArrowDownRoundedIcon />
+          </IconButton>
+        </>
+      </Tooltip>
 
       <Menu
         anchorEl={anchorEl}
@@ -90,7 +106,7 @@ const UserCard: FC<UserCardProps> = () => {
           Настройки
         </MenuItem>
         <MenuItem
-          onClick={handleClose}
+          onClick={handleLogout}
           sx={{
             color: red[500]
           }}

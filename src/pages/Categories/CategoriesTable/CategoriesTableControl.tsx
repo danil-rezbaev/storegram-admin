@@ -5,9 +5,9 @@ import { DeleteRounded, EditRounded, MoreVert } from "@mui/icons-material";
 import { blue, grey, red } from "@mui/material/colors";
 import styles from "../../../components/UserCard/UserCard.module.scss";
 import { useAppDispatch } from "../../../hooks/redux";
-import { openDeleteCategoryModal } from "../../../store/deleteCategoryModal";
+import { openDeleteCategoryModal } from "../../../store/slices/deleteCategoryModal";
 import { useNavigate } from "react-router-dom";
-import { editCategory } from "../../../store/editCategorySlice";
+import { editCategory } from "../../../store/slices/editCategorySlice";
 import { Category } from "../CategoriesTypes";
 
 export type CategoriesTableControlProps = {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FC } from 'react';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import CategoriesTableRow from "./CategoriesTableRow";
 import { Category } from "../CategoriesTypes";
 
@@ -16,19 +16,22 @@ const CategoriesTable: FC<CategoriesTableProps> = (props) => {
   const tableHead = [
     {
       title: "Код",
-      sx: {width: '75px'}
+      xs: {width: '75px'}
     },
     {
       title: "Название",
-      sx: {width: '200px'}
+      xs: {width: '200px'}
     },
     {
       title: "Включено",
-      sx: {width: '200px'}
+      xs: {width: '200px'}
     },
     {
       title: "",
-      sx: {width: '50px'}
+      xs: {
+        width: '50px',
+        textAlign: 'center'
+      }
     }
   ]
 
@@ -39,28 +42,40 @@ const CategoriesTable: FC<CategoriesTableProps> = (props) => {
         mt: 2
       }}
     >
-      <Table aria-label="category table">
+      <Table aria-label="categories-table">
+        {data.length === 0 ? (
+          <caption style={{
+            textAlign: 'center'
+          }}>
+            <Typography>
+              Нет элементов в списке
+            </Typography>
+          </caption>
+        ) : null }
+
         <TableHead>
           <TableRow>
             {tableHead.map(item => (
               <TableCell
                 key={item.title}
                 scope="row"
-                sx={item.sx}
+                sx={item.xs}
               >
                 <b>{ item.title }</b>
               </TableCell>
             ))}
           </TableRow>
         </TableHead>
-        <TableBody>
-          {data.map((row) => (
-            <CategoriesTableRow
-              key={row.code}
-              data={row}
-            />
-          ))}
-        </TableBody>
+        {data.length >= 0 ? (
+          <TableBody>
+            { data.map((row) => (
+              <CategoriesTableRow
+                key={row.code}
+                data={row}
+              />
+            )) }
+          </TableBody>
+        ) : null }
       </Table>
     </TableContainer>
   );

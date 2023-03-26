@@ -1,30 +1,33 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Product } from "../pages/EditProduct/ProductTypes";
+import { Product } from "../../types/Store";
 
 export type EditProduct = {
   data: Product,
-  type: "edit" | "show"
+  type: "edit" | "create"
 }
 
 const initialState: EditProduct = {
   data: {
-    id: "",
+    _id: "",
     images: [''],
     title: "",
     description: "",
     category: "",
-    price: 0,
+    price: {
+      currency: 'rub',
+      value: '0'
+    },
     active: true,
   },
-  type: "show"
+  type: "create"
 }
 
 const editProductSlice = createSlice({
   name: 'viewProduct',
   initialState,
   reducers: {
-    editProduct (state, action: PayloadAction<{ data: Product, type?: "edit" | "show" }>) {
-      const { data, type = "show" } = action.payload
+    editProduct (state, action: PayloadAction<{ data: Product, type?: "edit" | "create" }>) {
+      const { data, type = "create" } = action.payload
 
       state.type = type
       state.data = data

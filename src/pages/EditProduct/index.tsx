@@ -10,12 +10,12 @@ const EditProduct: FC<EditProductProps> = () => {
   const store = useAppSelector(store => store.editProduct)
 
   const {
-    id,
+    title,
   } = store.data
 
   return (
     <PageContent
-      title={`Редактировать продукт #${id}`}
+      title={`Редактировать товар: ${title}`}
     >
       <ProductContent
         product={store.data}

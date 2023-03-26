@@ -2,7 +2,7 @@ import * as React from 'react';
 import { FC } from 'react';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import OrdersTableRow  from "./TableRow";
-import { OrderInfo } from "../../OrdersTypes";
+import { OrderInfo } from "../../../../types/Order";
 
 export type OrdersTableProps = {
   data: OrderInfo[]

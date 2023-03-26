@@ -43,7 +43,10 @@ const CategoriesTableRow: FC<ProductsTableRowProps> = (props) => {
         </Typography>
       </TableCell>
 
-      <TableCell>
+      <TableCell sx={{
+        width: '50px',
+        textAlign: 'center'
+      }}>
         <CategoriesTableControl data={data} />
       </TableCell>
     </TableRow>

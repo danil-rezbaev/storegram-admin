@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { FC } from 'react';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import { Product } from "../../EditProduct/ProductTypes";
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import ProductsTableRow from "./ProductsTableRow";
+import { Product } from "../../../types/Store";
 
 export type ProductsTableProps = {
   data: Product[]
@@ -14,10 +14,6 @@ const ProductsTable: FC<ProductsTableProps> = (props) => {
   } = props
 
   const tableHead = [
-    {
-      title: "ID",
-      sx: {width: '75px'}
-    },
     {
       title: "Изображение",
       sx: {width: '150px'}
@@ -47,7 +43,17 @@ const ProductsTable: FC<ProductsTableProps> = (props) => {
         mt: 2
       }}
     >
-      <Table aria-label="simple table">
+      <Table aria-label="products table">
+        {data.length === 0 ? (
+            <caption style={{
+              textAlign: 'center'
+            }}>
+              <Typography>
+                Нет элементов в списке
+              </Typography>
+            </caption>
+          ) : null }
+
         <TableHead>
           <TableRow>
             {tableHead.map(item => (
@@ -61,14 +67,18 @@ const ProductsTable: FC<ProductsTableProps> = (props) => {
             ))}
           </TableRow>
         </TableHead>
-        <TableBody>
-          {data.map((row) => (
-            <ProductsTableRow
-              key={row.id}
-              data={row}
-            />
-          ))}
-        </TableBody>
+
+
+        {data.length >= 0 ? (
+          <TableBody>
+            { data.map((row) => (
+                <ProductsTableRow
+                  key={ row._id }
+                  data={ row }
+                />
+              )) }
+          </TableBody>
+        ) : null }
       </Table>
     </TableContainer>
   );

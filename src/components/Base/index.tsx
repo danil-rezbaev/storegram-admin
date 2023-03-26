@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Header from "../Header";
 import Sidebar from "../Sidebar";
+import { useAppSelector } from "../../hooks/redux";
 
 export type BaseProps = {
   children: ReactNode
@@ -21,6 +22,14 @@ const Base: FC<BaseProps> = (props) => {
   };
 
   const sidebarWidth = 300;
+  const store = useAppSelector(store => store.auth)
+
+
+  if(!store.status) {
+    return (
+      <>{children}</>
+    )
+  }
 
   return (
     <Box

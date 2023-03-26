@@ -2,20 +2,19 @@ import * as React from 'react';
 import { FC } from 'react';
 import PageContent from "../../components/PageContent";
 import * as yup from "yup";
-import { Form, Formik } from "formik";
-import {
-  Box, Button,
-  FormControlLabel,
-  Grid,
-  InputAdornment,
-  MenuItem,
-  Select,
-  Switch,
-  TextField,
-  Typography
-} from "@mui/material";
-import UploadImage from "../EditProduct/UploadImage";
-import { CurrencyRuble } from "@mui/icons-material";
+// import { Form, Formik } from "formik";
+// import {
+//   Box, Button,
+//   FormControlLabel,
+//   Grid,
+//   InputAdornment,
+//   MenuItem,
+//   Select,
+//   Switch,
+//   TextField,
+//   Typography
+// } from "@mui/material";
+// import { CurrencyRuble } from "@mui/icons-material";
 
 export type SettingsProps = unknown
 
