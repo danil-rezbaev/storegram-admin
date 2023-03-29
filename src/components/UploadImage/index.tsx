@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Modal, Upload } from 'antd';
 import type { RcFile } from 'antd/es/upload';
@@ -39,10 +39,6 @@ const UploadImage: React.FC<UploadImageProps> = (props) => {
       <div style={{ marginTop: 8 }}>Загрузить</div>
     </div>
   );
-
-  useEffect(() => {
-    console.log('fileList', fileList)
-  }, [fileList])
 
   return (
     <>

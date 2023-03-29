@@ -27,6 +27,10 @@ const ProductsTable: FC<ProductsTableProps> = (props) => {
       sx: {width: '300px'}
     },
     {
+      title: "Активно",
+      sx: {width: '300px'}
+    },
+    {
       title: "Стоимость",
       sx: {width: '150px'}
     },

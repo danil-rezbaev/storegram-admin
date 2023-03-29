@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { FC } from 'react';
+import { FC} from 'react';
 import { TableCell, TableRow, Typography } from "@mui/material";
 import _ from "lodash";
 import ProductsTableControl from "./ProductsTableControl";
 import { Product } from "../../../types/Store";
+import InsertPhotoOutlined from '@mui/icons-material/InsertPhotoOutlined';
 
 export type ProductsTableRowProps = {
   data: Product
@@ -15,10 +16,11 @@ const ProductsTableRow: FC<ProductsTableRowProps> = (props) => {
   } = props
 
   const {
-    // images,
+    images,
     title,
     category,
-    price
+    price,
+    active
   } = data
 
   const info = _.entries({title, category})
@@ -31,15 +33,20 @@ const ProductsTableRow: FC<ProductsTableRowProps> = (props) => {
       hover
     >
       <TableCell>
-        {/*<img*/}
-        {/*  src={images[0]}*/}
-        {/*  style={{*/}
-        {/*    width: '100%',*/}
-        {/*    maxWidth: '80px',*/}
-        {/*    maxHeight: '80px'*/}
-        {/*  }}*/}
-        {/*  alt="preview product"*/}
-        {/*/>*/}
+        {images.length > 0
+          ? (
+            <img
+              src={`http://localhost:443/${images[0]}`}
+              style={{
+                width: '100%',
+                maxWidth: '80px',
+                maxHeight: '80px'
+              }}
+              alt="preview product"
+            />
+          ) : (
+            <InsertPhotoOutlined fontSize="large" />
+          )}
       </TableCell>
 
       {info.map(item => (
@@ -52,7 +59,13 @@ const ProductsTableRow: FC<ProductsTableRowProps> = (props) => {
 
       <TableCell>
         <Typography>
-          {`${price.value} ${price.currency}`}
+          {active ? "Да" : "Нет"}
+        </Typography>
+      </TableCell>
+
+      <TableCell>
+        <Typography>
+          {`${price?.value} ${price?.currency}`}
         </Typography>
       </TableCell>
 

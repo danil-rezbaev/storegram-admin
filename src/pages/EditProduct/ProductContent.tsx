@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import {
   Box,
   Button,
@@ -20,9 +20,11 @@ import axios from "../../axios";
 import { openFloatAlert } from "../../store/slices/floatAlertSlice";
 import UploadImage from "../../components/UploadImage";
 import { UploadFile } from "antd/es/upload/interface";
-import { UploadProps, RcFile } from "antd/es/upload";
+import { UploadProps } from "antd/es/upload";
 import { useNavigate } from "react-router-dom";
 import { addProduct, editProduct } from "../../store/slices/storeSlice";
+import ProductOptions from "../../components/ProductOption";
+import { nanoid } from "@reduxjs/toolkit";
 
 export type ProductContentProps = {
   product?: Product,
@@ -35,9 +37,36 @@ const ProductContent: FC<ProductContentProps> = (props) => {
     type
   } = props
 
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const fileListHandler: UploadProps['onChange'] = ({ fileList: newFileList }) =>
-    setFileList(newFileList);
+  const [active, setActive] = useState<boolean>(product?.active ?? true)
+
+  const activeHandler = () => {
+    setActive((value) => !value)
+  }
+
+  const fileListFormat = (list: string[]): UploadFile[] => {
+    return list.map(item => (
+      {
+        uid: nanoid(),
+        name: 'image.png',
+        status: 'done',
+        url: `http://localhost:443/${item}`,
+      }
+    ))
+  }
+
+  const [fileList, setFileList] = useState<UploadFile[]>(product?.images ? fileListFormat(product.images) : []);
+
+  const defaultFileListLength = useMemo(() => {
+    return fileList?.length
+  }, [])
+
+  const fileListHandler: UploadProps['onChange'] = (data ) => {
+    try {
+      setFileList(data.fileList);
+    } catch (err) {
+      setFileList([]);
+    }
+  }
 
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
@@ -53,7 +82,6 @@ const ProductContent: FC<ProductContentProps> = (props) => {
 
   const validationSchema = yup.object().shape({
     title: yup.string().required("Поле обязательно к заполнению"),
-    description: yup.string().required("Поле обязательно к заполнению"),
     price: yup.string().required("Поле обязательно к заполнению"),
   })
 
@@ -67,33 +95,39 @@ const ProductContent: FC<ProductContentProps> = (props) => {
   }
 
   const formSubmit = async (value: any) => {
-    const formData = new FormData();
-
-    fileList.forEach((file) => {
-      formData.append('files[]', file as RcFile);
-    });
-
-    console.log({formData})
-
-    const imagesResponse = await axios.post('/upload', formData)
-
-    console.log(imagesResponse.data)
-
-    const valueFormat = {
-      ...value,
-      price: {
-        currency: 'rub',
-        value: value.price ?? 0
-      },
-    }
-
-    if(!current) {
-      return
-    }
-
     try {
-      const data = await axios.post('/product',
-        { product: valueFormat })
+      const filesChanged = defaultFileListLength !== fileList?.length
+      const uploadImages = async () => {
+        const formData = new FormData();
+
+        fileList.forEach((file) => {
+          formData.append('image', file.originFileObj as File);
+        });
+
+        const imagesResponse = await axios.post(`/upload`, formData)
+
+        return imagesResponse.data
+      }
+      const imagesFormat = filesChanged ? await uploadImages() : null
+
+      if(!current) {
+        return
+      }
+
+      const contentFormat = {
+        ...value,
+        active,
+        price: {
+          currency: 'rub',
+          value: value.price ?? 0
+        },
+      }
+
+      const dataFormat = filesChanged ? {...contentFormat, images: imagesFormat.images} : contentFormat
+
+      const data = type === 'create'
+        ? await axios.post('/product', { product: dataFormat })
+        : await axios.patch('/product', { product: dataFormat })
 
       if (data.status === 200) {
         dispatch(openFloatAlert({
@@ -102,12 +136,12 @@ const ProductContent: FC<ProductContentProps> = (props) => {
         }))
 
         if(type === 'create') {
-          dispatch(addProduct({product: valueFormat}))
+          dispatch(addProduct({product: dataFormat}))
         } else if (type === 'update') {
-          dispatch(editProduct({product: valueFormat}))
+          dispatch(editProduct({product: dataFormat}))
         }
 
-        navigate('/products-list')
+        // navigate('/products-list')
       } else {
         dispatch(openFloatAlert({
           title: `Ошибка при ${type === 'create' ? 'создании' : 'изменении'} товара`,
@@ -186,21 +220,29 @@ const ProductContent: FC<ProductContentProps> = (props) => {
                   error={!!errors.description}
                   fullWidth
                 />
+
+                <Typography
+                  variant="subtitle1"
+                  mt={1.5}
+                >
+                  Опции
+                </Typography>
+                <ProductOptions/>
               </Box>
             </Grid>
             <Grid item xs={12} sm={4}>
               <Box sx={boxStyles}>
                 <FormControlLabel
-                  value="bottom"
                   control={
                     <Switch
                       color="primary"
                       name="active"
-                      onChange={handleChange}
-                      value={values.active}
+                      onClick={activeHandler}
+                      checked={active}
+                      defaultChecked
                     />
                   }
-                  label="Включить"
+                  label="Активно"
                   labelPlacement="end"
                 />
 

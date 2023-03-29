@@ -12,7 +12,7 @@ export type ProductPrice = {
 export type Product = {
   _id: string,
   active: boolean,
-  images?: string[],
+  images: string[],
   title: string,
   description: string,
   category: string,

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Box, Button, FormControlLabel, Grid, Switch, TextField, Typography } from "@mui/material";
 import * as yup from 'yup'
 import { Form, Formik } from 'formik'
@@ -8,6 +8,7 @@ import axios from "../../axios";
 import { openFloatAlert } from "../../store/slices/floatAlertSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { useNavigate } from "react-router-dom";
+import { addCategory, editCategory } from "../../store/slices/storeSlice";
 
 export type ProductContentProps = {
   category?: Category,
@@ -16,8 +17,15 @@ export type ProductContentProps = {
 
 const CategoryContent: FC<ProductContentProps> = (props) => {
   const {
+    category,
     type
   } = props
+
+  const [active, setActive] = useState<boolean>(category?.active ?? true)
+
+  const activeHandler = () => {
+    setActive((value) => !value)
+  }
 
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
@@ -49,7 +57,8 @@ const CategoryContent: FC<ProductContentProps> = (props) => {
 
   const formSubmit = async (value: any) => {
     const valueFormat = {
-      ...value,
+      active: value.active,
+      title: value.title,
       code: generateCode(value.title)
     }
 
@@ -67,6 +76,12 @@ const CategoryContent: FC<ProductContentProps> = (props) => {
           type: "success"
         }))
         navigate('/categories')
+
+        if(type === 'create') {
+          dispatch(addCategory({category: valueFormat}))
+        } else if (type === 'update') {
+          dispatch(editCategory({category: valueFormat}))
+        }
       } else {
         dispatch(openFloatAlert({
           title: `Ошибка при ${type === 'create' ? 'создании' : 'изменении'} категории`,
@@ -104,16 +119,16 @@ const CategoryContent: FC<ProductContentProps> = (props) => {
             <Grid item xs={12} sm={8}>
               <Box sx={boxStyles}>
                 <FormControlLabel
-                  value="bottom"
                   control={
                     <Switch
                       color="primary"
                       name="active"
-                      onChange={handleChange}
-                      value={values.active}
+                      onClick={activeHandler}
+                      checked={active}
+                      defaultChecked
                     />
                   }
-                  label="Включить"
+                  label="Активно"
                   labelPlacement="end"
                 />
 
