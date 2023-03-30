@@ -70,7 +70,7 @@ const CategoriesTable: FC<CategoriesTableProps> = (props) => {
           <TableBody>
             { data.map((row) => (
               <CategoriesTableRow
-                key={row.code}
+                key={row.id}
                 data={row}
               />
             )) }

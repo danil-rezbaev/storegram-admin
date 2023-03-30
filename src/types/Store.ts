@@ -1,8 +1,4 @@
-export type Category = {
-  code: string,
-  title: string,
-  active: boolean,
-}
+import { Category } from "../pages/Categories/CategoriesTypes";
 
 export type ProductPrice = {
   currency: string,

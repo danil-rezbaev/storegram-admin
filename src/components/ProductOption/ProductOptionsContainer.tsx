@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { ProductOptionItem } from "./OptionsType";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
+import ProductOptionSet from "./ProductOptionsSet";
 
 export type ProductOptionsContainerProps = {
   values: ProductOptionItem[]
@@ -14,15 +15,17 @@ const ProductOptionsContainer: FC<ProductOptionsContainerProps> = (props) => {
   return (
     <Box>
       {values.map((item) => (
-        <div>
+        <Stack direction="row" spacing={2}>
           <p>{item.title}</p>
           <p>{item.priceChange}</p>
 
           <Button onClick={handleDelete}>
             удалить
           </Button>
-        </div>
+        </Stack>
       ))}
+
+      <ProductOptionSet />
     </Box>
   );
 };

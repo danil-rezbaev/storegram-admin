@@ -20,7 +20,7 @@ const CategoriesTableControl: FC<CategoriesTableControlProps> = (props) => {
   } = props
 
   const {
-    code,
+    id,
     title
   } = data
 
@@ -41,7 +41,7 @@ const CategoriesTableControl: FC<CategoriesTableControlProps> = (props) => {
 
   const handleDelete = () => {
     setAnchorEl(null);
-    dispatch(openDeleteCategoryModal({ id: code, title}))
+    dispatch(openDeleteCategoryModal({ id, title}))
   }
 
   const handleEdit = () => {

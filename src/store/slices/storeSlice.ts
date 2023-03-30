@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "../../axios";
-import { Category, Product, Store, StoreShort } from "../../types/Store";
+import { Product, Store, StoreShort } from "../../types/Store";
+import { Category } from "../../pages/Categories/CategoriesTypes";
 
 // export const fetchCreateStore = createAsyncThunk('store/create', async (params: {}) => {
 //   const { data } = await axios.post('/store/create', params)

@@ -8,7 +8,8 @@ import { useNavigate } from "react-router-dom";
 import ProductsTable from "./ProductsTable";
 import DeleteProductModal from "../../modal/DeleteProductModal";
 import { useAppSelector } from "../../hooks/redux";
-import { Category, Product } from "../../types/Store";
+import { Product } from "../../types/Store";
+import { Category } from "../Categories/CategoriesTypes";
 
 export type ProductsListProps = unknown
 

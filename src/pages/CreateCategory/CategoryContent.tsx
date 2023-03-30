@@ -9,6 +9,7 @@ import { openFloatAlert } from "../../store/slices/floatAlertSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { useNavigate } from "react-router-dom";
 import { addCategory, editCategory } from "../../store/slices/storeSlice";
+import { nanoid } from "@reduxjs/toolkit";
 
 export type ProductContentProps = {
   category?: Category,
@@ -57,7 +58,8 @@ const CategoryContent: FC<ProductContentProps> = (props) => {
 
   const formSubmit = async (value: any) => {
     const valueFormat = {
-      active: value.active,
+      id: nanoid(),
+      active: active,
       title: value.title,
       code: generateCode(value.title)
     }
@@ -98,8 +100,7 @@ const CategoryContent: FC<ProductContentProps> = (props) => {
 
   const initial = {
     title: '',
-    code: '',
-    active: true
+    code: ''
   }
 
   return (

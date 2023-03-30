@@ -1,17 +1,29 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Box, Button, FormControlLabel, Grid, Switch, TextField, Typography } from "@mui/material";
 import * as yup from 'yup'
 import { Form, Formik } from 'formik'
 import { Category } from "../Categories/CategoriesTypes";
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
+import axios from "../../axios";
+import { openFloatAlert } from "../../store/slices/floatAlertSlice";
+import { addCategory, editCategory } from "../../store/slices/storeSlice";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 
 export type ProductContentProps = {
-  category?: Category,
-  type: 'create' | 'update'
+  category: Category,
 }
 
 const CategoryContent: FC<ProductContentProps> = (props) => {
-  const data = { ...props.category }
+  const {
+    category,
+  } = props
+
+  const [active, setActive] = useState<boolean>(category?.active ?? true)
+
+  const activeHandler = () => {
+    setActive((value) => !value)
+  }
 
   const validationSchema = yup.object().shape({
     title: yup.string().required("Поле обязательно к заполнению"),
@@ -26,6 +38,10 @@ const CategoryContent: FC<ProductContentProps> = (props) => {
     }
   }
 
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  const {current} = useAppSelector(store => store.store)
+
   // @ts-ignore
   let cyrillicToTranslit = new CyrillicToTranslit({preset: "ru"});
 
@@ -37,18 +53,55 @@ const CategoryContent: FC<ProductContentProps> = (props) => {
     return cyrillicToTranslit.transform(title, '_').toLowerCase();
   }
 
-  const formSubmit = (value: any) => {
-    const dataFormat = {
-      ...value,
+  const formSubmit = async (value: any) => {
+    console.log({category})
+
+    const valueFormat = {
+      id: category.id,
+      active: value.active,
+      title: value.title,
       code: generateCode(value.title)
     }
 
-    console.log(dataFormat)
+    console.log({valueFormat})
+
+    if(!current) {
+      return
+    }
+
+    try {
+      const data = await axios.patch('/category',
+        { category: valueFormat })
+
+      if (data.status === 200) {
+        dispatch(openFloatAlert({
+          title: `Категория успешно изменена`,
+          type: "success"
+        }))
+        navigate('/categories')
+        dispatch(editCategory({category: valueFormat}))
+      } else {
+        dispatch(openFloatAlert({
+          title: `Ошибка при изменении категории`,
+          type: "error"
+        }))
+      }
+    } catch (e) {
+      dispatch(openFloatAlert({
+        title: `Ошибка при изменении категории`,
+        type: "error"
+      }))
+    }
+  }
+
+  const initial = {
+    title: '',
+    code: '',
   }
 
   return (
     <Formik
-      initialValues={data}
+      initialValues={category ?? initial}
       onSubmit={formSubmit}
       validationSchema={validationSchema}
       validateOnChange
@@ -68,8 +121,8 @@ const CategoryContent: FC<ProductContentProps> = (props) => {
                     <Switch
                       color="primary"
                       name="active"
-                      onChange={handleChange}
-                      value={values.active}
+                      onChange={activeHandler}
+                      value={active}
                     />
                   }
                   label="Включить"

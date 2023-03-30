@@ -5,7 +5,7 @@ import CategoriesTable from "./CategoriesTable";
 import DeleteCategoryModal from "../../modal/DeleteCategoryModal";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../hooks/redux";
-import { Category } from "../../types/Store";
+import { Category } from "./CategoriesTypes";
 
 export type CreateProductProps = unknown
 

@@ -14,7 +14,7 @@ import {
 import { CurrencyRuble } from "@mui/icons-material";
 import * as yup from 'yup'
 import { Form, Formik } from 'formik'
-import { Category, Product } from "../../types/Store";
+import { Product } from "../../types/Store";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import axios from "../../axios";
 import { openFloatAlert } from "../../store/slices/floatAlertSlice";
@@ -25,6 +25,7 @@ import { useNavigate } from "react-router-dom";
 import { addProduct, editProduct } from "../../store/slices/storeSlice";
 import ProductOptions from "../../components/ProductOption";
 import { nanoid } from "@reduxjs/toolkit";
+import { Category } from "../Categories/CategoriesTypes";
 
 export type ProductContentProps = {
   product?: Product,
@@ -49,7 +50,7 @@ const ProductContent: FC<ProductContentProps> = (props) => {
         uid: nanoid(),
         name: 'image.png',
         status: 'done',
-        url: `http://localhost:443/${item}`,
+        url: `http://localhost:5000/${item}`,
       }
     ))
   }
@@ -74,6 +75,7 @@ const ProductContent: FC<ProductContentProps> = (props) => {
   const categories: Category[] = currentStore?.categories ?? []
 
   const defaultCategory = {
+    id: '1',
     code: 'default',
     title: 'По умолчанию',
     active: true,

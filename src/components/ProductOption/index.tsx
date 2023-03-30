@@ -38,10 +38,25 @@ const ProductOption: FC<ProductOptionProps> = (props) => {
     <Box>
       <Box>
         {productOptions.map(item => (
-          <div>
-            <b>{item.title}</b>
-            <p>{item.type}</p>
-            <div>
+          <div
+            style={{
+              marginBottom: '16px'
+            }}
+          >
+            <Stack
+              direction="row"
+              spacing={2}
+            >
+              <b>{item.title}</b>
+              <p>{item.type}</p>
+            </Stack>
+
+            <div
+              style={{
+                borderLeft: '1px dashed gray',
+                paddingLeft: '16px'
+              }}
+            >
               <ProductOptionsContainer values={item.values} />
             </div>
           </div>

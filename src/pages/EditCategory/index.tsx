@@ -17,10 +17,7 @@ const EditCategory: FC<EditCategoryProps> = () => {
     <PageContent
       title={`Редактировать категорию #${code}`}
     >
-      <CategoryContent
-        category={store.data}
-        type="update"
-      />
+      <CategoryContent category={store.data}/>
     </PageContent>
   );
 }

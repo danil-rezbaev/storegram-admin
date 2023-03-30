@@ -1,92 +1,76 @@
 import * as React from 'react';
-import { FC, useState } from 'react';
+import { ChangeEvent, FC, useState } from 'react';
 import Box from '@mui/material/Box';
-import { Button, Stack, TextField } from '@mui/material';
+import { Button, SelectChangeEvent, Stack, TextField } from '@mui/material';
 import { Form, Formik } from 'formik'
 import * as yup from "yup";
-import { ProductOptionItem } from "./OptionsType";
+import { FieldsType, ProductOptionItem, ProductOptionType } from "./OptionsType";
 
 export type ProductOptionSetProps = unknown
 
 const ProductOptionSet: FC<ProductOptionSetProps> = (props) => {
-  const [productOptionSet, setProductOptionSet] = useState<ProductOptionItem[]>([])
+  const [title, setTitle] = useState('')
+  const [titleError, setTitleError] = useState(false)
 
-  const validationSchema = yup.object().shape({
-    title: yup.string().required(),
-  })
+  const [priceChange, setPriceChange] = useState('')
+  const [productOptionsSet, setProductOptionsSet] = useState<ProductOptionItem[]>([])
 
-  const initialValues: ProductOptionItem = {
-    title: '',
-    priceChange: ''
+  const handleTitle = (event: ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.currentTarget.value)
   }
 
-  const formSubmit = async (value: ProductOptionItem) => {
-    const {title, priceChange} = value
+  const handlePriceChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setPriceChange(event.currentTarget.value)
+  }
 
+  const formSubmit = () => {
     const dataFormat = {
       title,
       priceChange,
     }
 
-    setProductOptionSet(value => [...value, dataFormat])
+    setProductOptionsSet(value => [...value, dataFormat])
   }
 
   return (
-    <Box
-      sx={{ display: 'flex' }}
-    >
-      <Formik
-        initialValues={initialValues}
-        onSubmit={formSubmit}
-        validationSchema={validationSchema}
-        validateOnChange
+    <Box>
+      <Stack direction="row" spacing={2}>
+        <TextField
+          id="product-title"
+          variant="outlined"
+          size="small"
+          name="title"
+          placeholder="Название опции"
+          onChange={handleTitle}
+          value={title}
+          error={titleError}
+          fullWidth
+        />
+
+        <TextField
+          id="product-priceChange"
+          variant="outlined"
+          size="small"
+          name="title"
+          placeholder="Изменение цены, используйте - если цена должна уменьшится "
+          onChange={handleTitle}
+          value={title}
+          error={titleError}
+          fullWidth
+        />
+      </Stack>
+
+      <Button
+        variant="contained"
+        size="large"
+        type="submit"
+        sx={{
+          mt: 1.5
+        }}
+        fullWidth
       >
-        {({ values, errors, handleChange, handleBlur, handleSubmit, touched }) => (
-          <Form
-            className="form"
-            onSubmit={handleSubmit}
-            noValidate={true}
-          >
-            <Stack direction="row" spacing={2}>
-              <TextField
-                id="product-title"
-                variant="outlined"
-                size="small"
-                name="title"
-                placeholder="Название опции"
-                onChange={handleChange}
-                value={values.title}
-                error={!!errors.title}
-                fullWidth
-              />
-
-              <TextField
-                id="product-priceChange"
-                variant="outlined"
-                size="small"
-                name="title"
-                placeholder="Изменение цены, используйте - если цена должна уменьшится "
-                onChange={handleChange}
-                value={values.priceChange}
-                error={!!errors.priceChange}
-                fullWidth
-              />
-            </Stack>
-
-            <Button
-              variant="contained"
-              size="large"
-              type="submit"
-              sx={{
-                mt: 1.5
-              }}
-              fullWidth
-            >
-              Создать вариант выбора
-            </Button>
-          </Form>
-        )}
-      </Formik>
+        Создать вариант выбора
+      </Button>
     </Box>
   );
 }

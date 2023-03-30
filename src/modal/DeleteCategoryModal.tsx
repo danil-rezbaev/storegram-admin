@@ -7,7 +7,6 @@ import CustomModal from "../components/Modal";
 import { closeDeleteProductModal } from "../store/slices/deleteProductModal";
 import axios from "../axios";
 import { openFloatAlert } from "../store/slices/floatAlertSlice";
-import { deleteProduct } from "../store/slices/storeSlice";
 
 const DeleteCategoryModal = () => {
   const dispatch = useAppDispatch()
@@ -39,14 +38,13 @@ const DeleteCategoryModal = () => {
           title: `Категория успешно удалена`,
           type: "success"
         }))
-
-        dispatch(deleteProduct({id}))
       } else {
         dispatch(openFloatAlert({
           title: `Ошибка при удалении категории`,
           type: "error"
         }))
       }
+      dispatch(closeDeleteProductModal())
     } catch (e) {
       dispatch(openFloatAlert({
         title: `Ошибка при удалении категории`,
