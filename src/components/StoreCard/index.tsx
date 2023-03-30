@@ -52,7 +52,7 @@ const StoreCard: FC<StoreCardProps> = () => {
   const currentStoreFirstLetter = currentStoreFormat.title.charAt(0)
 
 
-  if(!store.default.length) {
+  if(!store.current) {
     return (
       <>
         <Button

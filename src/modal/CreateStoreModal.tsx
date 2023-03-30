@@ -30,11 +30,11 @@ const CreateStoreModal = () => {
 
       const format = [
         ...storeStore.default,
-      {
-        title: data.data.title,
-        id: data.data._id
-      }
-    ]
+        {
+          title: data.data.title,
+          id: data.data._id
+        }
+      ]
 
       dispatch(initializeStores({data: format}))
       dispatch(changeStore({id: data.data._id}))
