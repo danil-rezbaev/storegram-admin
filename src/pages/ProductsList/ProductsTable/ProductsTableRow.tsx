@@ -36,7 +36,7 @@ const ProductsTableRow: FC<ProductsTableRowProps> = (props) => {
         {images.length > 0
           ? (
             <img
-              src={`http://localhost:5000/${images[0]}`}
+              src={`https://typper.online/${images[0]}`}
               style={{
                 width: '100%',
                 maxWidth: '80px',

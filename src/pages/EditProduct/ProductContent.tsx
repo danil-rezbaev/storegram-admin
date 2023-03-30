@@ -50,7 +50,7 @@ const ProductContent: FC<ProductContentProps> = (props) => {
         uid: nanoid(),
         name: 'image.png',
         status: 'done',
-        url: `http://localhost:5000/${item}`,
+        url: `https://typper.online/${item}`,
       }
     ))
   }
