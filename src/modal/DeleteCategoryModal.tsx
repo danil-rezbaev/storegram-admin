@@ -4,9 +4,9 @@ import Box from "@mui/material/Box";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { closeDeleteCategoryModal } from "../store/slices/deleteCategoryModal";
 import CustomModal from "../components/Modal";
-import { closeDeleteProductModal } from "../store/slices/deleteProductModal";
 import axios from "../axios";
 import { openFloatAlert } from "../store/slices/floatAlertSlice";
+import { deleteCategory } from "../store/slices/storeSlice";
 
 const DeleteCategoryModal = () => {
   const dispatch = useAppDispatch()
@@ -24,7 +24,7 @@ const DeleteCategoryModal = () => {
   }
 
   const handleDelete = async () => {
-    dispatch(closeDeleteProductModal())
+    dispatch(closeDeleteCategoryModal())
 
     if(!current) {
       return
@@ -38,13 +38,14 @@ const DeleteCategoryModal = () => {
           title: `Категория успешно удалена`,
           type: "success"
         }))
+
+        dispatch(deleteCategory({id}))
       } else {
         dispatch(openFloatAlert({
           title: `Ошибка при удалении категории`,
           type: "error"
         }))
       }
-      dispatch(closeDeleteProductModal())
     } catch (e) {
       dispatch(openFloatAlert({
         title: `Ошибка при удалении категории`,

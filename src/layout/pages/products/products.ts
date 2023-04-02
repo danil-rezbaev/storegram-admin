@@ -7,10 +7,8 @@ export const productsTable: Product[] = [
     title: 'Pizza',
     description: 'very taste',
     category: 'pizza',
-    price: {
-      currency: 'rub',
-      value: '1234'
-    },
-    active: true
+    price: 10,
+    active: true,
+    options: []
   }
 ]

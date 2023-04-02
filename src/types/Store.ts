@@ -1,4 +1,5 @@
 import { Category } from "../pages/Categories/CategoriesTypes";
+import { ProductOptionType } from "../components/ProductOption/OptionsType";
 
 export type ProductPrice = {
   currency: string,
@@ -12,7 +13,8 @@ export type Product = {
   title: string,
   description: string,
   category: string,
-  price: ProductPrice,
+  price: number,
+  options?: ProductOptionType[]
 }
 
 export type StoreShort = {

@@ -101,7 +101,12 @@ const ProductsList: FC<ProductsListProps> = () => {
             disabled={!categories.length}
           >
             {categories.map((item) => (
-              <MenuItem value={item.code}>{ item.title }</MenuItem>
+              <MenuItem
+                key={item.id}
+                value={item.code}
+              >
+                { item.title }
+              </MenuItem>
             ))}
           </Select>
         </FormControl>

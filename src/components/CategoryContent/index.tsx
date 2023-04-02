@@ -2,34 +2,30 @@ import React, { FC, useState } from 'react';
 import { Box, Button, FormControlLabel, Grid, Switch, TextField, Typography } from "@mui/material";
 import * as yup from 'yup'
 import { Form, Formik } from 'formik'
-import { Category } from "../Categories/CategoriesTypes";
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
-import axios from "../../axios";
-import { openFloatAlert } from "../../store/slices/floatAlertSlice";
-import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { useNavigate } from "react-router-dom";
-import { addCategory, editCategory } from "../../store/slices/storeSlice";
+import { useAppSelector } from "../../hooks/redux";
 import { nanoid } from "@reduxjs/toolkit";
+import { Category } from "../../pages/Categories/CategoriesTypes";
 
-export type ProductContentProps = {
+export type CategoryContentProps = {
   category?: Category,
-  type: 'create' | 'update'
+  onSubmit: (category: Category) => void
 }
 
-const CategoryContent: FC<ProductContentProps> = (props) => {
+const CategoryContent: FC<CategoryContentProps> = (props) => {
   const {
     category,
-    type
+    onSubmit
   } = props
 
   const [active, setActive] = useState<boolean>(category?.active ?? true)
+
+  console.log({active})
 
   const activeHandler = () => {
     setActive((value) => !value)
   }
 
-  const navigate = useNavigate()
-  const dispatch = useAppDispatch()
   const {current} = useAppSelector(store => store.store)
 
   const validationSchema = yup.object().shape({
@@ -57,8 +53,8 @@ const CategoryContent: FC<ProductContentProps> = (props) => {
   }
 
   const formSubmit = async (value: any) => {
-    const valueFormat = {
-      id: nanoid(),
+    const valueFormat: Category = {
+      id: category?.id ?? nanoid(),
       active: active,
       title: value.title,
       code: generateCode(value.title)
@@ -68,37 +64,10 @@ const CategoryContent: FC<ProductContentProps> = (props) => {
       return
     }
 
-    try {
-      const data = await axios.post('/category',
-        { category: valueFormat })
-
-      if (data.status === 200) {
-        dispatch(openFloatAlert({
-          title: `Категория успешно ${type === 'create' ? 'создана' : 'изменена'}`,
-          type: "success"
-        }))
-        navigate('/categories')
-
-        if(type === 'create') {
-          dispatch(addCategory({category: valueFormat}))
-        } else if (type === 'update') {
-          dispatch(editCategory({category: valueFormat}))
-        }
-      } else {
-        dispatch(openFloatAlert({
-          title: `Ошибка при ${type === 'create' ? 'создании' : 'изменении'} категории`,
-          type: "error"
-        }))
-      }
-    } catch (e) {
-      dispatch(openFloatAlert({
-        title: `Ошибка при ${type === 'create' ? 'создании' : 'изменении'} категории`,
-        type: "error"
-      }))
-    }
+    onSubmit(valueFormat)
   }
 
-  const initial = {
+  const initial = category ?? {
     title: '',
     code: ''
   }
@@ -125,10 +94,10 @@ const CategoryContent: FC<ProductContentProps> = (props) => {
                       color="primary"
                       name="active"
                       onClick={activeHandler}
-                      checked={active}
                       defaultChecked
                     />
                   }
+                  value={active}
                   label="Активно"
                   labelPlacement="end"
                 />

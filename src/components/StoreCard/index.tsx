@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styles from "./StoreCard.module.scss";
-import { Avatar, Button, Menu, MenuItem, Tooltip } from "@mui/material";
+import { Avatar, Button, Link, Menu, MenuItem, Tooltip } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
@@ -51,7 +51,6 @@ const StoreCard: FC<StoreCardProps> = () => {
   }
   const currentStoreFirstLetter = currentStoreFormat.title.charAt(0)
 
-
   if(!store.current) {
     return (
       <>
@@ -77,9 +76,13 @@ const StoreCard: FC<StoreCardProps> = () => {
       </Avatar>
 
       <div>
-        <b className={styles.title}>
+        <Link
+          className={styles.title}
+          href={`https://storegram.vercel.app/id/${store.current.id}`}
+          target="_blank"
+        >
           {currentStoreFormat.title}
-        </b>
+        </Link>
       </div>
 
       <Tooltip title="Мои магазины">

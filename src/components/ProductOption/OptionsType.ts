@@ -1,12 +1,14 @@
 export type FieldsType = 'checkbox' | 'radio'
 
 export type ProductOptionItem = {
+  id: string,
   title: string,
-  priceChange: string
+  priceChange: number
 }
 
 export type ProductOptionType = {
+  id: string,
   title: string,
-  type: FieldsType,
+  optionType: FieldsType,
   values: ProductOptionItem[]
 }

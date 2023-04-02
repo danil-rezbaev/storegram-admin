@@ -1,0 +1,33 @@
+@use "../../assets/styles/variables";
+
+.item {
+  width: 100%;
+  padding: 11px 14px;
+  background: variables.$l-gray;
+  color: variables.$black;
+  border: none;
+  border-radius: 10px;
+  margin: 14px 0;
+  display: grid;
+  align-items: center;
+  grid-template-columns: 20px 1fr 1fr;
+  grid-gap: 10px;
+  transition: color, background-color 0.15s, 0.15s;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border: 1px solid variables.$secondary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.1s;
+  color: variables.$white;
+  border-radius: 5px !important;
+
+  &.radio {
+    border-radius: 100px !important;
+  }
+}

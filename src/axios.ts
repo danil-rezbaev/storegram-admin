@@ -6,7 +6,13 @@ const instance = axios.create({
 
 instance.interceptors.request.use((config) => {
   config.headers.Authorization = window.localStorage.getItem('token')
-  config.headers.Store = window.localStorage.getItem('store')
+
+  try {
+    config.headers.StoreId = JSON.parse(window.localStorage.getItem('store') as string)?.id
+  } catch (err) {
+    console.log(err)
+  }
+
   return config
 })
 

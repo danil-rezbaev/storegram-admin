@@ -33,7 +33,7 @@ const ProductsTableRow: FC<ProductsTableRowProps> = (props) => {
       hover
     >
       <TableCell>
-        {images.length > 0
+        {images?.length > 0
           ? (
             <img
               src={`https://typper.online/${images[0]}`}
@@ -65,7 +65,7 @@ const ProductsTableRow: FC<ProductsTableRowProps> = (props) => {
 
       <TableCell>
         <Typography>
-          {`${price?.value} ${price?.currency}`}
+          {price}
         </Typography>
       </TableCell>
 

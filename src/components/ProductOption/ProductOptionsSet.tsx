@@ -1,19 +1,23 @@
 import * as React from 'react';
 import { ChangeEvent, FC, useState } from 'react';
 import Box from '@mui/material/Box';
-import { Button, SelectChangeEvent, Stack, TextField } from '@mui/material';
-import { Form, Formik } from 'formik'
-import * as yup from "yup";
-import { FieldsType, ProductOptionItem, ProductOptionType } from "./OptionsType";
+import { Button, Stack, TextField } from '@mui/material';
+import { ProductOptionItem } from "./OptionsType";
+import { nanoid } from "@reduxjs/toolkit";
 
-export type ProductOptionSetProps = unknown
+export type ProductOptionSetProps = {
+  addValues: (arg1: ProductOptionItem) => void
+}
 
 const ProductOptionSet: FC<ProductOptionSetProps> = (props) => {
+  const {
+    addValues
+  } = props
+
   const [title, setTitle] = useState('')
   const [titleError, setTitleError] = useState(false)
-
   const [priceChange, setPriceChange] = useState('')
-  const [productOptionsSet, setProductOptionsSet] = useState<ProductOptionItem[]>([])
+  const [priceChangeError, setPriceChangeError] = useState(false)
 
   const handleTitle = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.currentTarget.value)
@@ -24,19 +28,39 @@ const ProductOptionSet: FC<ProductOptionSetProps> = (props) => {
   }
 
   const formSubmit = () => {
-    const dataFormat = {
-      title,
-      priceChange,
+    if (!title) {
+      setTitleError(true)
+    } else {
+      setTitleError(false)
     }
 
-    setProductOptionsSet(value => [...value, dataFormat])
+    if (!priceChange) {
+      setPriceChangeError(true)
+    } else {
+      setPriceChangeError(false)
+    }
+
+    if (!title || !priceChange) {
+      return
+    }
+
+    const id = nanoid()
+
+    const dataFormat = {
+      id: id,
+      title,
+      priceChange: +priceChange,
+    }
+
+    addValues(dataFormat)
+    setTitle('')
+    setPriceChange('')
   }
 
   return (
     <Box>
       <Stack direction="row" spacing={2}>
         <TextField
-          id="product-title"
           variant="outlined"
           size="small"
           name="title"
@@ -48,14 +72,14 @@ const ProductOptionSet: FC<ProductOptionSetProps> = (props) => {
         />
 
         <TextField
-          id="product-priceChange"
           variant="outlined"
           size="small"
-          name="title"
+          type="number"
+          name="priceChange"
           placeholder="Изменение цены, используйте - если цена должна уменьшится "
-          onChange={handleTitle}
-          value={title}
-          error={titleError}
+          onChange={handlePriceChange}
+          value={priceChange}
+          error={priceChangeError}
           fullWidth
         />
       </Stack>
@@ -63,10 +87,10 @@ const ProductOptionSet: FC<ProductOptionSetProps> = (props) => {
       <Button
         variant="contained"
         size="large"
-        type="submit"
         sx={{
           mt: 1.5
         }}
+        onClick={formSubmit}
         fullWidth
       >
         Создать вариант выбора

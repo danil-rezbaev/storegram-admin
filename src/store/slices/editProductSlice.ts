@@ -13,11 +13,9 @@ const initialState: EditProduct = {
     title: "",
     description: "",
     category: "",
-    price: {
-      currency: 'rub',
-      value: '0'
-    },
+    price: 0,
     active: true,
+    options: []
   },
   type: "create"
 }

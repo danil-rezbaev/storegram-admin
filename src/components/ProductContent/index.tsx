@@ -1,7 +1,7 @@
 import React, { FC, useMemo, useState } from 'react';
+import { Form, Formik } from "formik";
 import {
-  Box,
-  Button,
+  Box, Button,
   FormControlLabel,
   Grid,
   InputAdornment,
@@ -11,34 +11,36 @@ import {
   TextField,
   Typography
 } from "@mui/material";
+import UploadImage from "../UploadImage";
+import ProductOptions from "../ProductOption";
 import { CurrencyRuble } from "@mui/icons-material";
-import * as yup from 'yup'
-import { Form, Formik } from 'formik'
-import { Product } from "../../types/Store";
-import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import axios from "../../axios";
-import { openFloatAlert } from "../../store/slices/floatAlertSlice";
-import UploadImage from "../../components/UploadImage";
+import * as yup from "yup";
+import { ProductOptionType } from "../ProductOption/OptionsType";
 import { UploadFile } from "antd/es/upload/interface";
-import { UploadProps } from "antd/es/upload";
-import { useNavigate } from "react-router-dom";
-import { addProduct, editProduct } from "../../store/slices/storeSlice";
-import ProductOptions from "../../components/ProductOption";
 import { nanoid } from "@reduxjs/toolkit";
-import { Category } from "../Categories/CategoriesTypes";
+import { UploadProps } from "antd/es/upload";
+import { useAppSelector } from "../../hooks/redux";
+import { Category } from "../../pages/Categories/CategoriesTypes";
+import axios from "../../axios";
+import { Product } from "../../types/Store";
 
 export type ProductContentProps = {
   product?: Product,
-  type: 'create' | 'update'
+  onSubmit: (data: Product) => void
 }
 
 const ProductContent: FC<ProductContentProps> = (props) => {
   const {
     product,
-    type
+    onSubmit
   } = props
 
   const [active, setActive] = useState<boolean>(product?.active ?? true)
+  const [productOptions, setProductOptions] = useState<ProductOptionType[]>( product?.options ?? [])
+
+  const getOptions = (data: ProductOptionType[]) => {
+    setProductOptions(data)
+  }
 
   const activeHandler = () => {
     setActive((value) => !value)
@@ -69,22 +71,9 @@ const ProductContent: FC<ProductContentProps> = (props) => {
     }
   }
 
-  const navigate = useNavigate()
-  const dispatch = useAppDispatch()
-  const {current, currentStore} = useAppSelector(store => store.store)
-  const categories: Category[] = currentStore?.categories ?? []
-
-  const defaultCategory = {
-    id: '1',
-    code: 'default',
-    title: 'По умолчанию',
-    active: true,
-  }
-  const categoriesFormat: Category[] = [defaultCategory, ...categories]
-
   const validationSchema = yup.object().shape({
     title: yup.string().required("Поле обязательно к заполнению"),
-    price: yup.string().required("Поле обязательно к заполнению"),
+    price: yup.number().required("Поле обязательно к заполнению"),
   })
 
   const boxStyles = {
@@ -96,71 +85,52 @@ const ProductContent: FC<ProductContentProps> = (props) => {
     }
   }
 
+  const {current, currentStore} = useAppSelector(store => store.store)
+  const categories: Category[] = currentStore?.categories ?? []
+
   const formSubmit = async (value: any) => {
     try {
-      const filesChanged = defaultFileListLength !== fileList?.length
-      const uploadImages = async () => {
-        const formData = new FormData();
+        const filesChanged = defaultFileListLength !== fileList?.length
+        const uploadImages = async () => {
+          const formData = new FormData();
 
-        fileList.forEach((file) => {
-          formData.append('image', file.originFileObj as File);
-        });
+          fileList.forEach((file) => {
+            formData.append('image', file.originFileObj as File);
+          });
 
-        const imagesResponse = await axios.post(`/upload`, formData)
+          const imagesResponse = await axios.post(`/upload`, formData)
 
-        return imagesResponse.data
-      }
-      const imagesFormat = filesChanged ? await uploadImages() : null
+          return imagesResponse.data
+        }
+        const imagesFormat = filesChanged ? await uploadImages() : null
 
-      if(!current) {
-        return
-      }
-
-      const contentFormat = {
-        ...value,
-        active,
-        price: {
-          currency: 'rub',
-          value: value.price ?? 0
-        },
-      }
-
-      const dataFormat = filesChanged ? {...contentFormat, images: imagesFormat.images} : contentFormat
-
-      const data = type === 'create'
-        ? await axios.post('/product', { product: dataFormat })
-        : await axios.patch('/product', { product: dataFormat })
-
-      if (data.status === 200) {
-        dispatch(openFloatAlert({
-          title: `Товар успешно ${type === 'create' ? 'создан' : 'изменен'}`,
-          type: "success"
-        }))
-
-        if(type === 'create') {
-          dispatch(addProduct({product: dataFormat}))
-        } else if (type === 'update') {
-          dispatch(editProduct({product: dataFormat}))
+        if (!current) {
+          return
         }
 
-        // navigate('/products-list')
-      } else {
-        dispatch(openFloatAlert({
-          title: `Ошибка при ${type === 'create' ? 'создании' : 'изменении'} товара`,
-          type: "error"
-        }))
-      }
-    } catch (e) {
-      dispatch(openFloatAlert({
-        title: `Ошибка при ${type === 'create' ? 'создании' : 'изменении'} товара`,
-        type: "error"
-      }))
+        const contentFormat: Product = {
+          ...value,
+          active,
+          options: productOptions,
+          images: []
+        }
+
+        const dataFormat: Product = filesChanged ? {
+          ...contentFormat,
+          images: imagesFormat.images,
+        } : contentFormat
+
+        onSubmit(dataFormat)
+      } catch (err) {
+      console.warn(err)
     }
   }
 
-  const initialValues = {
-    ...product,
-    price: product?.price.value ?? ''
+  const initialValues = product ?? {
+    title: '',
+    description: '',
+    price: '',
+    category: '',
   }
 
   return (
@@ -229,7 +199,10 @@ const ProductContent: FC<ProductContentProps> = (props) => {
                 >
                   Опции
                 </Typography>
-                <ProductOptions/>
+                <ProductOptions
+                  values={productOptions}
+                  getOptions={getOptions}
+                />
               </Box>
             </Grid>
             <Grid item xs={12} sm={4}>
@@ -280,17 +253,15 @@ const ProductContent: FC<ProductContentProps> = (props) => {
                 </Typography>
 
                 <Select
-                  // value={categories}
-                  // onChange={handleSelect}
                   name="category"
                   onChange={handleChange}
                   value={values.category}
                   error={!!errors.category}
-                  defaultValue={categoriesFormat[0].code}
+                  defaultValue={categories[0]?.code}
                   size="small"
                   fullWidth
                 >
-                  {categoriesFormat.map((item) => (
+                  {categories.map((item) => (
                     <MenuItem value={item.code}>{ item.title }</MenuItem>
                   ))}
                 </Select>
@@ -309,7 +280,7 @@ const ProductContent: FC<ProductContentProps> = (props) => {
             </Grid>
           </Grid>
         </Form>
-        )}
+      )}
     </Formik>
   );
 };

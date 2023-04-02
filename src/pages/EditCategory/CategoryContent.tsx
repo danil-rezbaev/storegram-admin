@@ -6,7 +6,7 @@ import { Category } from "../Categories/CategoriesTypes";
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
 import axios from "../../axios";
 import { openFloatAlert } from "../../store/slices/floatAlertSlice";
-import { addCategory, editCategory } from "../../store/slices/storeSlice";
+import { editCategory } from "../../store/slices/storeSlice";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 
@@ -54,16 +54,12 @@ const CategoryContent: FC<ProductContentProps> = (props) => {
   }
 
   const formSubmit = async (value: any) => {
-    console.log({category})
-
     const valueFormat = {
       id: category.id,
       active: value.active,
       title: value.title,
       code: generateCode(value.title)
     }
-
-    console.log({valueFormat})
 
     if(!current) {
       return
