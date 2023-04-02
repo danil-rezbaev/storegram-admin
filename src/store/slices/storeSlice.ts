@@ -145,7 +145,7 @@ const storeSlice = createSlice({
 
       if (state.currentStore) {
         const newList = state.currentStore.categories.map((item) => {
-          if(item.code === category.code) {
+          if(item.id === category.id) {
             return category
           }
           return item
@@ -157,12 +157,12 @@ const storeSlice = createSlice({
       saveCurrentStore(state.current)
     },
 
-    deleteCategory(state, action: PayloadAction<{code: string}>) {
-      const {code} = action.payload
+    deleteCategory(state, action: PayloadAction<{id: string}>) {
+      const {id} = action.payload
 
       if (state.currentStore) {
         const filterList = state.currentStore.categories
-          .filter((item) => item.code !== code)
+          .filter((item) => item.id !== id)
 
         state.currentStore.categories = filterList
       }
