@@ -3,6 +3,7 @@ import { ProductOptionItem, ProductOptionType } from "./OptionsType";
 import { Box, Button, Stack } from "@mui/material";
 import ProductOptionSet from "./ProductOptionsSet";
 import styles from "./ProductOptions.module.scss";
+import cs from "classnames";
 
 export type ProductOptionsContainerProps = {
   data: ProductOptionType,
@@ -70,9 +71,7 @@ const ProductOptionsContainer: FC<ProductOptionsContainerProps> = (props) => {
             <Box
               className={styles.item}
             >
-              <span className={styles.checkbox}>
-
-              </span>
+              <span className={cs(styles[data.optionType])}></span>
               <p>{item.title}</p>
 
               <Stack

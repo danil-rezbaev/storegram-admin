@@ -17,8 +17,9 @@ const OrdersTableRow: FC<OrdersTableRowProps> = (props) => {
   const {
     id,
     date,
+    client,
     amount,
-    status
+    // status
   } = data
 
   const dispatch = useAppDispatch()
@@ -40,11 +41,17 @@ const OrdersTableRow: FC<OrdersTableRowProps> = (props) => {
         <DateFormat date={date}/>
       </TableCell>
       <TableCell>
-        <b>{id}</b>
+        <b>#{id}</b>
         <p>Сумма заказа {amount}</p>
       </TableCell>
+
+      <TableCell>
+        <b>{client.name}</b>
+        <p>{client.phone}</p>
+      </TableCell>
+
       <TableCell align="right">
-        <OrderStatus type={status} />
+        <OrderStatus type="warning" />
       </TableCell>
     </TableRow>
   );

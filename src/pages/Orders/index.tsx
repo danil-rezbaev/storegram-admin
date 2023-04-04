@@ -1,19 +1,23 @@
 import * as React from 'react';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import PageContent from "../../components/PageContent";
 import { Tab } from "@mui/material";
 import { TabContext, TabList } from '@mui/lab';
-import { orderData } from "../../layout/pages/order/orders";
 import OrdersTable from "./components/OrdersTable";
 import OrderSidebar from "./components/OrderSidebar";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { closeOrderInfoModal } from "../../store/slices/orderInfoModalSlice";
+import { OrderInfo } from "../../types/Order";
+import axios from "../../axios";
 
 export type OrdersProps = unknown
 
 const Orders: FC<OrdersProps> = () => {
   const [value, setValue] = useState('all');
+
+  const [ordersList, setOrdersList] = useState<OrderInfo[]>([])
+  const {currentStore} = useAppSelector(store => store.store)
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -30,6 +34,18 @@ const Orders: FC<OrdersProps> = () => {
   }
 
   const sidebarWidth = 400
+
+  const getOrders = async () => {
+    const { data } = await axios.get('/orders')
+
+    if (data) {
+      setOrdersList(data)
+    }
+  }
+
+  useEffect(() => {
+    getOrders()
+  }, [currentStore])
 
   return (
     <Box
@@ -56,7 +72,7 @@ const Orders: FC<OrdersProps> = () => {
             </TabList>
           </Box>
         </TabContext>
-        <OrdersTable data={orderData} />
+        <OrdersTable data={ordersList} />
       </PageContent>
 
       <OrderSidebar

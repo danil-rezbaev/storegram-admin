@@ -17,6 +17,10 @@ export type Product = {
   options?: ProductOptionType[]
 }
 
+export type OrderProduct = Product & {
+  count: number
+}
+
 export type StoreShort = {
   _id?: any,
   id: string,
@@ -27,5 +31,5 @@ export type Store = {
   title: string,
   products: Product[],
   currency: string,
-  categories: Category[]
+  categories: Category[],
 }

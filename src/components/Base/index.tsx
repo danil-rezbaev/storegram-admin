@@ -24,7 +24,6 @@ const Base: FC<BaseProps> = (props) => {
   const sidebarWidth = 300;
   const store = useAppSelector(store => store.auth)
 
-
   if(!store.status) {
     return (
       <>{children}</>

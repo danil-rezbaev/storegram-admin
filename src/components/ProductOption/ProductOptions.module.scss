@@ -15,19 +15,24 @@
   transition: color, background-color 0.15s, 0.15s;
 }
 
-.checkbox {
+@mixin check-icon {
   width: 20px;
   height: 20px;
-  background: #fff;
+  background: variables.$white;;
   border: 1px solid variables.$secondary;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color 0.1s;
   color: variables.$white;
-  border-radius: 5px !important;
+}
 
-  &.radio {
-    border-radius: 100px !important;
-  }
+.checkbox {
+  @include check-icon;
+  border-radius: 5px !important;
+}
+
+.radio {
+  @include check-icon;
+  border-radius: 100px !important;
 }

@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { FC} from 'react';
+import { FC } from 'react';
 import { TableCell, TableRow, Typography } from "@mui/material";
 import _ from "lodash";
 import ProductsTableControl from "./ProductsTableControl";
 import { Product } from "../../../types/Store";
 import InsertPhotoOutlined from '@mui/icons-material/InsertPhotoOutlined';
+import { SERVER_URL } from "../../../const";
 
 export type ProductsTableRowProps = {
   data: Product
@@ -36,7 +37,7 @@ const ProductsTableRow: FC<ProductsTableRowProps> = (props) => {
         {images?.length > 0
           ? (
             <img
-              src={`https://typper.online/${images[0]}`}
+              src={`${SERVER_URL}${images[0]}`}
               style={{
                 width: '100%',
                 maxWidth: '80px',

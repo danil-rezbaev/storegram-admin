@@ -1,6 +1,6 @@
 import FormControl from '@mui/material/FormControl';
 import * as React from 'react';
-import { ChangeEvent, FC, useEffect } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 import PageContent from "../../components/PageContent";
 import { InputAdornment, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import { Search } from "@mui/icons-material";
@@ -17,12 +17,11 @@ const ProductsList: FC<ProductsListProps> = () => {
   const {current, currentStore} = useAppSelector(store => store.store)
 
   const navigate = useNavigate()
-  const [categories, setCategories] = React.useState<Category[]>([]);
-  const [products, setProducts] = React.useState<Product[]>([]);
-  const [productsModified, setProductsModified] = React.useState<Product[]>(products);
-  const [category, setCategory] = React.useState('');
-
-  const [search, setSearch] = React.useState('');
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [productsModified, setProductsModified] = useState<Product[]>(products);
+  const [category, setCategory] = useState('');
+  const [search, setSearch] = useState('');
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>): void => {
     setSearch(event.target.value)
@@ -43,7 +42,10 @@ const ProductsList: FC<ProductsListProps> = () => {
   }, [products, search])
 
   const handleChange = (event: SelectChangeEvent) => {
-    setCategory(event.target.value);
+    const code = event.target.value
+    setCategory(code)
+    const filter = products.filter(item => item.category === code)
+    setProductsModified(filter)
   };
 
   useEffect(() => {

@@ -85,8 +85,6 @@ const ProductOption: FC<ProductOptionProps> = (props) => {
       return item
     })
 
-    console.log({optionId, valueId, modifyList})
-
     setProductOptions(modifyList)
   }
 

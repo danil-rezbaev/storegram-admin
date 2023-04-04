@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { FC } from 'react';
 import { TableCell, TableRow } from "@mui/material";
-import OrderStatus from "../OrderStatus";
 import DateFormat from "../DateFormat";
 import { OrderInfo } from "../../../../types/Order";
 import { useAppDispatch } from "../../../../hooks/redux";
@@ -18,7 +17,7 @@ const OrdersTableRow: FC<OrdersTableRowProps> = (props) => {
     id,
     date,
     amount,
-    status
+    // status
   } = data
 
   const dispatch = useAppDispatch()
@@ -43,9 +42,9 @@ const OrdersTableRow: FC<OrdersTableRowProps> = (props) => {
         <b>{id}</b>
         <p>Сумма заказа {amount}</p>
       </TableCell>
-      <TableCell align="right">
-        <OrderStatus type={status} />
-      </TableCell>
+      {/*<TableCell align="right">*/}
+      {/*  <OrderStatus type={status} />*/}
+      {/*</TableCell>*/}
     </TableRow>
   );
 }

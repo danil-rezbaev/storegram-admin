@@ -9,6 +9,7 @@ import { openCreateStoreModal } from "../../store/slices/createStoreModal";
 import CreateStoreModal from "../../modal/CreateStoreModal";
 import { changeStore } from "../../store/slices/storeSlice";
 import { StoreShort } from "../../types/Store";
+import { APP_URL } from "../../const";
 
 export type StoreCardProps =  unknown
 
@@ -78,7 +79,7 @@ const StoreCard: FC<StoreCardProps> = () => {
       <div>
         <Link
           className={styles.title}
-          href={`https://storegram.vercel.app/id/${store.current.id}`}
+          href={`${APP_URL}/id/${store.current.id}`}
           target="_blank"
         >
           {currentStoreFormat.title}

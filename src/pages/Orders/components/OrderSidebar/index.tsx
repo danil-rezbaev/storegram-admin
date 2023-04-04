@@ -68,7 +68,7 @@ const OrderSidebar: FC<OrderSidebarProps> = (props) => {
       >
         <Box className={styles.header}>
           <Typography component="h5">
-            <b>{data?.id}</b>
+            <b>#{data?.id}</b>
           </Typography>
 
           <IconButton onClick={onClose}>
@@ -94,11 +94,11 @@ const OrderSidebar: FC<OrderSidebarProps> = (props) => {
             <ListItem>
               <Typography>Клиент</Typography>
               <div>
-                <Typography>{data?.info.customer}</Typography>
+                <Typography>{data?.client.name}</Typography>
                 <Link
-                  href={`tel:${data?.info.phone}`}
+                  href={`tel:${data?.client.phone}`}
                 >
-                  {data?.info.phone}
+                  {data?.client.phone}
                 </Link>
               </div>
             </ListItem>
@@ -108,7 +108,7 @@ const OrderSidebar: FC<OrderSidebarProps> = (props) => {
             <ListItem>
               <Typography>Статус заказа</Typography>
               <div>
-                <OrderStatus type={data?.status}/>
+                <OrderStatus type='warning'/>
               </div>
             </ListItem>
 

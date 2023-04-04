@@ -52,14 +52,12 @@ const authSlice = createSlice({
     },
   },
   extraReducers: {
-    // @ts-ignore
-    [fetchAuthMe.pending]: (state) => {
+    [String(fetchAuthMe.pending)]: (state) => {
       state.status = false
       state.data = null
       saveStore(state)
     },
-    // @ts-ignore
-    [fetchAuthMe.fulfilled]: (state, action) => {
+    [String(fetchAuthMe.fulfilled)]: (state, action) => {
       state.data = action.payload
       state.status = true
 
@@ -74,43 +72,36 @@ const authSlice = createSlice({
 
       saveStore(state)
     },
-    // @ts-ignore
-    [fetchAuthMe.rejected]: (state) => {
+    [String(fetchAuthMe.rejected)]: (state) => {
       state.status = false
       state.data = null
       saveStore(state)
     },
-    // @ts-ignore
-    [fetchLogin.pending]: (state) => {
+    [String(fetchLogin.pending)]: (state) => {
       state.status = false
       saveStore(state)
     },
-    // @ts-ignore
-    [fetchLogin.fulfilled]: (state, action) => {
+    [String(fetchLogin.fulfilled)]: (state, action) => {
       state.data = action.payload
       state.status = true
       saveStore(state)
     },
-    // @ts-ignore
-    [fetchLogin.rejected]: (state) => {
+    [String(fetchLogin.rejected)]: (state) => {
       state.data = null
       state.status = false
       saveStore(state)
     },
-    // @ts-ignore
-    [fetchSignup.pending]: (state) => {
+    [String(fetchSignup.pending)]: (state) => {
       state.data = null
       state.status = false
       saveStore(state)
     },
-    // @ts-ignore
-    [fetchSignup.fulfilled]: (state, action) => {
+    [String(fetchSignup.fulfilled)]: (state, action) => {
       state.data = action.payload
       state.status = true
       saveStore(state)
     },
-    // @ts-ignore
-    [fetchSignup.rejected]: (state) => {
+    [String(fetchSignup.rejected)]: (state) => {
       state.data = null
       state.status = false
       saveStore(state)

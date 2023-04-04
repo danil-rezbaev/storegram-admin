@@ -1,7 +1,8 @@
-import React, { FC, useMemo, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { Form, Formik } from "formik";
 import {
-  Box, Button,
+  Box,
+  Button,
   FormControlLabel,
   Grid,
   InputAdornment,
@@ -23,6 +24,7 @@ import { useAppSelector } from "../../hooks/redux";
 import { Category } from "../../pages/Categories/CategoriesTypes";
 import axios from "../../axios";
 import { Product } from "../../types/Store";
+import { SERVER_URL } from "../../const";
 
 export type ProductContentProps = {
   product?: Product,
@@ -52,16 +54,16 @@ const ProductContent: FC<ProductContentProps> = (props) => {
         uid: nanoid(),
         name: 'image.png',
         status: 'done',
-        url: `https://typper.online/${item}`,
+        url: `${SERVER_URL}${item}`,
       }
     ))
   }
 
   const [fileList, setFileList] = useState<UploadFile[]>(product?.images ? fileListFormat(product.images) : []);
 
-  const defaultFileListLength = useMemo(() => {
-    return fileList?.length
-  }, [])
+  // const defaultFileListLength = useMemo(() => {
+  //   return fileList?.length
+  // }, [])
 
   const fileListHandler: UploadProps['onChange'] = (data ) => {
     try {
@@ -90,7 +92,7 @@ const ProductContent: FC<ProductContentProps> = (props) => {
 
   const formSubmit = async (value: any) => {
     try {
-        const filesChanged = defaultFileListLength !== fileList?.length
+        // const filesChanged = defaultFileListLength !== fileList?.length
         const uploadImages = async () => {
           const formData = new FormData();
 
@@ -102,7 +104,8 @@ const ProductContent: FC<ProductContentProps> = (props) => {
 
           return imagesResponse.data
         }
-        const imagesFormat = filesChanged ? await uploadImages() : null
+        // const imagesFormat = filesChanged ? await uploadImages() : null
+        const imagesFormat = await uploadImages()
 
         if (!current) {
           return
@@ -115,10 +118,15 @@ const ProductContent: FC<ProductContentProps> = (props) => {
           images: []
         }
 
-        const dataFormat: Product = filesChanged ? {
+        // const dataFormat: Product = filesChanged ? {
+        //   ...contentFormat,
+        //   images: imagesFormat.images,
+        // } : contentFormat
+      //
+        const dataFormat: Product = {
           ...contentFormat,
           images: imagesFormat.images,
-        } : contentFormat
+        }
 
         onSubmit(dataFormat)
       } catch (err) {

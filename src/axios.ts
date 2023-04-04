@@ -1,7 +1,8 @@
 import axios from "axios";
+import { SERVER_URL } from "./const";
 
 const instance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'https://typper.online'
+  baseURL: process.env.REACT_APP_API_URL || SERVER_URL
 })
 
 instance.interceptors.request.use((config) => {

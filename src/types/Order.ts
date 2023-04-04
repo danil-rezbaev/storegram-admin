@@ -1,16 +1,19 @@
-export type OrderProduct = {
-  title: string,
-  price: number
-}
+import { OrderProduct } from "./Store";
+
+// export type OrderProduct = {
+//   title: string,
+//   price: number
+// }
 
 export type OrderInfo = {
   id: string,
   date: string,
-  info: {
-    customer: string,
+  client: {
+    name: string,
     phone: string,
   },
   products: OrderProduct[],
+  quantity: number,
   amount: number,
-  status: 'success' | 'error'
+  // status: 'success' | 'error'
 }
