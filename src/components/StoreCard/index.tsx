@@ -89,7 +89,12 @@ const StoreCard: FC<StoreCardProps> = () => {
             alignItems="center"
           >
             <p>{currentStoreFormat.title}</p>
-            <OpenInNewRoundedIcon fontSize="small"/>
+
+            <OpenInNewRoundedIcon
+              sx={{
+                fontSize: '15px'
+              }}
+            />
           </Stack>
         </Link>
       </div>

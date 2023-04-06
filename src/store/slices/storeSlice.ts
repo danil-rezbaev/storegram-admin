@@ -90,11 +90,17 @@ const storeSlice = createSlice({
 
     addProduct(state, action: PayloadAction<{product: Product}>) {
       const {product} = action.payload
+      const {category = 'default'} = product
+
+      const productFormat = {
+        ...product,
+        category
+      }
 
       if (state.currentStore) {
         state.currentStore.products = [
           ...state.currentStore.products,
-          product
+          productFormat
         ]
       }
     },

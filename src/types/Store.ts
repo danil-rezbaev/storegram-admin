@@ -14,6 +14,7 @@ export type Product = {
   description: string,
   category: string,
   price: number,
+  hint?: string,
   options?: ProductOptionType[]
 }
 

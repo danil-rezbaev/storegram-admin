@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { Form, Formik } from "formik";
 import {
   Box,
@@ -48,28 +48,37 @@ const ProductContent: FC<ProductContentProps> = (props) => {
     setActive((value) => !value)
   }
 
-  const fileListFormat = (list: string[]): UploadFile[] => {
-    return list.map(item => (
-      {
-        uid: nanoid(),
-        name: 'image.png',
-        status: 'done',
-        url: `${SERVER_URL}/${item}`,
-      }
-    ))
-  }
+  const defaultImages = useMemo((): UploadFile[] => {
+    if (product?.images) {
+      return product.images.map(item => (
+        {
+          uid: nanoid(),
+          name: 'image.png',
+          status: 'done',
+          url: `${SERVER_URL}/${item}`,
+        }
+      ))
+    }
 
-  const [fileList, setFileList] = useState<UploadFile[]>(product?.images ? fileListFormat(product.images) : []);
+    return []
+  }, [])
 
-  // const defaultFileListLength = useMemo(() => {
-  //   return fileList?.length
-  // }, [])
+  const [fileList, setFileList] = useState<UploadFile[]>(defaultImages);
+  const [newFileList, setNewFileList] = useState<UploadFile[]>([]);
+
+  useEffect(() => {
+    if (newFileList.length) {
+      setFileList(newFileList)
+    }
+  }, [newFileList])
 
   const fileListHandler: UploadProps['onChange'] = (data ) => {
-    try {
-      setFileList(data.fileList);
-    } catch (err) {
-      setFileList([]);
+    if(data.fileList) {
+      try {
+        setNewFileList(data.fileList);
+      } catch (err) {
+        console.warn(err)
+      }
     }
   }
 
@@ -92,11 +101,10 @@ const ProductContent: FC<ProductContentProps> = (props) => {
 
   const formSubmit = async (value: any) => {
     try {
-        // const filesChanged = defaultFileListLength !== fileList?.length
         const uploadImages = async () => {
           const formData = new FormData();
 
-          fileList.forEach((file) => {
+          newFileList.forEach((file) => {
             formData.append('image', file.originFileObj as File);
           });
 
@@ -104,7 +112,7 @@ const ProductContent: FC<ProductContentProps> = (props) => {
 
           return imagesResponse.data
         }
-        // const imagesFormat = filesChanged ? await uploadImages() : null
+
         const imagesFormat = await uploadImages()
 
         if (!current) {
@@ -115,18 +123,14 @@ const ProductContent: FC<ProductContentProps> = (props) => {
           ...value,
           active,
           options: productOptions,
-          images: []
+          images: [],
+          category: value.category?.code
         }
 
-        // const dataFormat: Product = filesChanged ? {
-        //   ...contentFormat,
-        //   images: imagesFormat.images,
-        // } : contentFormat
-      //
-        const dataFormat: Product = {
+        const dataFormat: Product = newFileList.length ? {
           ...contentFormat,
           images: imagesFormat.images,
-        }
+        } : contentFormat
 
         onSubmit(dataFormat)
       } catch (err) {
@@ -138,7 +142,8 @@ const ProductContent: FC<ProductContentProps> = (props) => {
     title: '',
     description: '',
     price: '',
-    category: '',
+    hint: '',
+    category: categories[0] ?? '',
   }
 
   return (
@@ -173,7 +178,6 @@ const ProductContent: FC<ProductContentProps> = (props) => {
                   Название
                 </Typography>
                 <TextField
-                  id="product-title"
                   variant="outlined"
                   size="small"
                   name="title"
@@ -190,7 +194,6 @@ const ProductContent: FC<ProductContentProps> = (props) => {
                   Описание
                 </Typography>
                 <TextField
-                  id="product-description"
                   variant="outlined"
                   multiline={true}
                   minRows={6}
@@ -198,6 +201,22 @@ const ProductContent: FC<ProductContentProps> = (props) => {
                   onChange={handleChange}
                   value={values.description}
                   error={!!errors.description}
+                  fullWidth
+                />
+
+                <Typography
+                  variant="subtitle1"
+                  mt={1.5}
+                >
+                  Подсказка
+                </Typography>
+                <TextField
+                  variant="outlined"
+                  size="small"
+                  name="hint"
+                  onChange={handleChange}
+                  value={values.hint}
+                  error={!!errors.hint}
                   fullWidth
                 />
 
@@ -236,7 +255,6 @@ const ProductContent: FC<ProductContentProps> = (props) => {
                   Цена
                 </Typography>
                 <TextField
-                  id="product-price"
                   variant="outlined"
                   InputProps={{
                     startAdornment:
@@ -265,7 +283,6 @@ const ProductContent: FC<ProductContentProps> = (props) => {
                   onChange={handleChange}
                   value={values.category}
                   error={!!errors.category}
-                  defaultValue={categories[0]?.code}
                   size="small"
                   fullWidth
                 >
