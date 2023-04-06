@@ -37,7 +37,7 @@ const ProductsTableRow: FC<ProductsTableRowProps> = (props) => {
         {images?.length > 0
           ? (
             <img
-              src={`${SERVER_URL}${images[0]}`}
+              src={`${SERVER_URL}/${images[0]}`}
               style={{
                 width: '100%',
                 maxWidth: '80px',

@@ -5,6 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Header from "../Header";
 import Sidebar from "../Sidebar";
 import { useAppSelector } from "../../hooks/redux";
+import { Typography } from "@mui/material";
 
 export type BaseProps = {
   children: ReactNode
@@ -23,6 +24,7 @@ const Base: FC<BaseProps> = (props) => {
 
   const sidebarWidth = 300;
   const store = useAppSelector(store => store.auth)
+  const { current } = useAppSelector(store => store.store)
 
   if(!store.status) {
     return (
@@ -54,7 +56,14 @@ const Base: FC<BaseProps> = (props) => {
         }}
       >
         <Toolbar />
-        {children}
+        {current ? children : (
+          <Box
+            textAlign="center"
+            mt={2}
+          >
+            <Typography variant="subtitle1">Контент недоступен, сперва создайте магазин</Typography>
+          </Box>
+        )}
       </Box>
     </Box>
   );

@@ -2,50 +2,54 @@ import * as React from 'react';
 import { FC } from 'react';
 import PageContent from "../../components/PageContent";
 import * as yup from "yup";
-// import { Form, Formik } from "formik";
-// import {
-//   Box, Button,
-//   FormControlLabel,
-//   Grid,
-//   InputAdornment,
-//   MenuItem,
-//   Select,
-//   Switch,
-//   TextField,
-//   Typography
-// } from "@mui/material";
-// import { CurrencyRuble } from "@mui/icons-material";
+import { Form, Formik } from "formik";
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import axios from "../../axios";
+import { openFloatAlert } from "../../store/slices/floatAlertSlice";
 
 export type SettingsProps = unknown
 
 const Settings: FC<SettingsProps> = () => {
+  const {current} = useAppSelector(store => store.store)
+
   const validationSchema = yup.object().shape({
     title: yup.string().required("Поле обязательно к заполнению"),
-    description: yup.string().required("Поле обязательно к заполнению"),
-    price: yup.string().required("Поле обязательно к заполнению"),
-    category: yup.string().required("Поле обязательно к заполнению"),
   })
 
-  const boxStyles = {
-    boxShadow: '0px 6px 6px 1px rgba(0, 0, 0, 0.05)',
-    borderRadius: 5,
-    padding: '30px 20px',
-    sm: {
-      padding: '40px 30px',
+  const dispatch = useAppDispatch()
+
+  const formSubmit = async (value: any) => {
+    try {
+      const data = await axios.patch('/store',
+        { value })
+
+      if (data.status === 200) {
+        dispatch(openFloatAlert({
+          title: `Магазин успешно отредактирован`,
+          type: "success"
+        }))
+      } else {
+        dispatch(openFloatAlert({
+          title: `Ошибка при отредактировании`,
+          type: "error"
+        }))
+      }
+    } catch (e) {
+      dispatch(openFloatAlert({
+        title: `Ошибка при отредактировании`,
+        type: "error"
+      }))
     }
   }
 
-  const formSubmit = (value: any) => {
-    console.log(value)
-  }
-
   const initialValue = {
-    title: ''
+    title: current?.title ?? '',
   }
 
   return (
     <PageContent title="Настройки">
-{/*      <Formik
+      <Formik
         initialValues={initialValue}
         onSubmit={formSubmit}
         validationSchema={validationSchema}
@@ -59,7 +63,7 @@ const Settings: FC<SettingsProps> = () => {
           >
             <Grid container spacing={2}>
               <Grid item xs={12} sm={8}>
-                <Box sx={boxStyles}>
+                <Box>
                   <Typography
                     variant="subtitle1"
                     mt={1.5}
@@ -67,7 +71,6 @@ const Settings: FC<SettingsProps> = () => {
                     Заголовок магазина
                   </Typography>
                   <TextField
-                    id="product-title"
                     variant="outlined"
                     size="small"
                     name="title"
@@ -76,89 +79,22 @@ const Settings: FC<SettingsProps> = () => {
                     error={!!errors.title}
                     fullWidth
                   />
-
-                  <Typography
-                    variant="subtitle1"
-                    mt={1.5}
-                  >
-                    Описание
-                  </Typography>
-                  <TextField
-                    id="product-description"
-                    variant="outlined"
-                    multiline={true}
-                    minRows={6}
-                    name="description"
-                    onChange={handleChange}
-                    value={values.description}
-                    error={!!errors.description}
-                    fullWidth
-                  />
                 </Box>
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <Box sx={boxStyles}>
-                  <FormControlLabel
-                    value="bottom"
-                    control={
-                      <Switch
-                        color="primary"
-                        name="active"
-                        onChange={handleChange}
-                        value={values.active}
-                      />
-                    }
-                    label="Включить"
-                    labelPlacement="end"
-                  />
 
-                  <Typography
-                    variant="subtitle1"
-                    mt={1.5}
+                <Box mt={2}>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    type="submit"
                   >
-                    Цена
-                  </Typography>
-                  <TextField
-                    id="product-price"
-                    variant="outlined"
-                    InputProps={{
-                      startAdornment:
-                        <InputAdornment position="start">
-                          <CurrencyRuble fontSize="small"/>
-                        </InputAdornment>,
-                    }}
-                    type="number"
-                    size="small"
-                    name="price"
-                    onChange={handleChange}
-                    value={values.price}
-                    error={!!errors.price}
-                    fullWidth
-                  />
-
-                  <Typography
-                    variant="subtitle1"
-                    mt={1.5}
-                  >
-                    Категория
-                  </Typography>
-
-                  <Box mt={2}>
-                    <Button
-                      variant="contained"
-                      size="large"
-                      type="submit"
-                      fullWidth
-                    >
-                      Сохранить
-                    </Button>
-                  </Box>
+                    Сохранить
+                  </Button>
                 </Box>
               </Grid>
             </Grid>
           </Form>
         )}
-      </Formik>*/}
+      </Formik>
     </PageContent>
   );
 }

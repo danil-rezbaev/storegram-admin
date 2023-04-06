@@ -17,7 +17,7 @@ const Orders: FC<OrdersProps> = () => {
   const [value, setValue] = useState('all');
 
   const [ordersList, setOrdersList] = useState<OrderInfo[]>([])
-  const {currentStore} = useAppSelector(store => store.store)
+  const {current, currentStore} = useAppSelector(store => store.store)
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -36,10 +36,12 @@ const Orders: FC<OrdersProps> = () => {
   const sidebarWidth = 400
 
   const getOrders = async () => {
-    const { data } = await axios.get('/orders')
+    if (current) {
+      const { data } = await axios.get('/orders')
 
-    if (data) {
-      setOrdersList(data)
+      if (data) {
+        setOrdersList(data)
+      }
     }
   }
 

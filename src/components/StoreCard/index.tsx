@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
 import styles from "./StoreCard.module.scss";
-import { Avatar, Button, Link, Menu, MenuItem, Tooltip } from "@mui/material";
+import { Avatar, Button, Link, Menu, MenuItem, Stack, Tooltip } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+import OpenInNewRoundedIcon from '@mui/icons-material/OpenInNewRounded';
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import { openCreateStoreModal } from "../../store/slices/createStoreModal";
@@ -82,7 +83,14 @@ const StoreCard: FC<StoreCardProps> = () => {
           href={`${APP_URL}/id/${store.current.id}`}
           target="_blank"
         >
-          {currentStoreFormat.title}
+          <Stack
+            direction="row"
+            spacing={0.5}
+            alignItems="center"
+          >
+            <p>{currentStoreFormat.title}</p>
+            <OpenInNewRoundedIcon fontSize="small"/>
+          </Stack>
         </Link>
       </div>
 

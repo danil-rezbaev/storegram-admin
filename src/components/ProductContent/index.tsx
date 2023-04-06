@@ -54,7 +54,7 @@ const ProductContent: FC<ProductContentProps> = (props) => {
         uid: nanoid(),
         name: 'image.png',
         status: 'done',
-        url: `${SERVER_URL}${item}`,
+        url: `${SERVER_URL}/${item}`,
       }
     ))
   }
